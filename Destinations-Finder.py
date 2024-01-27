@@ -25,12 +25,16 @@ def receive_answer():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500    
+
+@app.route('/submit-data', methods=['POST'])
 def find_destination():
+    data = request.json
+    data_string = json.dumps(data)
     completion = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
         {"role": "system", "content": "You are a friendly expert in tourism and travelling that lieks to keep it short"},
-        {"role": "user", "content": "Travel guide based on: I like swimming and warm weather. I do not have a big budget, just around £500 and I wanna go away for 10 days."}
+        {"role": "user", "content": "Travel guide based on: "+data_string}
     ],
     max_tokens=60
     )
