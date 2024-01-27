@@ -10,36 +10,44 @@ CORS(app)
 
 client = OpenAI()
 
-@app.route('/submit-data', methods=['POST'])
-def receive_answer():
-    data = request.json
-    data_string = json.dumps(data)
-    try:
-        reply = client.chat.completions.create(
-            messages=[
-            {"role": "user","content": data_string + ".If answer unrelated to question reply no,else ignore"}
-            ],
-            max_tokens=3
-        )
-        return jsonify({"response":reply.choices[0].message.content == "No"})
+  
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500    
 
 @app.route('/submit-data', methods=['POST'])
 def find_destination():
     data = request.json
-    data_string = json.dumps(data)
-    completion = client.chat.completions.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "system", "content": "You are a friendly expert in tourism and travelling that lieks to keep it short"},
-        {"role": "user", "content": "Travel guide based on: "+data_string}
-    ],
-    max_tokens=60
-    )
 
-    return completion.choices[0].message.content
+    # Prepare the messages for the OpenAI API
+    messages = [{"role": "system", "content": "You are an expert in tourism and traveling and create amazing travel plans based on user preferences."}]
+    question_number = 0
+    for question, answer in data.items():
+        question_number += 1
+        messages.append({"role": "user", "content": question})
+        messages.append({"role": "assistant", "content": answer})
+        messages.append({"role": "system", "content": "If the answer is unrelated to the question, reply 'unrelated', else ignore."})
+        
+        try:
+            completion = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=messages,
+                max_tokens=60
+            )
+            if completion.choices[0].message.content.strip().lower() == 'unrelated':
+                return jsonify({"error": f"Unrelated answer detected at question number {question_number}"}), 400
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    final_prompt = "Please create a detailed travel plan based on the above questions and answers."
+    messages.append({"role": "user", "content": final_prompt})
+    try:
+        final_completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=messages,
+            max_tokens=150  
+        )
+        return jsonify({"response": final_completion.choices[0].message.content})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500    
 
 if __name__ == '__main__':
     app.run()
