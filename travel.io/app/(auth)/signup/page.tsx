@@ -34,10 +34,9 @@ export default function Home() {
 		},
 	});
 
-	// 2. Define a submit handler.
+	// 2. Define a submit handler for sign-up.
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
+		// Handle the sign-up process here.
 		console.log(values);
 	}
 
@@ -47,33 +46,28 @@ export default function Home() {
 				<div className="w-full flex flex-col justify-center items-center gap-8 p-8 md:p-10">
 					<CircleUserIcon className="w-8 h-8" />
 
-					<h1 className="text-2xl font-bold"> Log in </h1>
+					<h1 className="text-2xl font-bold"> Sign up </h1>
 
 					<p>
-						{" "}
-						Don't have an account?{" "}
-						<Link className="underline" href={"/signup"}>
-							{" "}
-							Sign up{" "}
+						Already have an account?{" "}
+						<Link className="underline" href={"/"}>
+							Log in
 						</Link>{" "}
 					</p>
 
 					<Button className="rounded-full gap-2 p-6">
 						<FacebookIcon />
-
-						<p> Log in with Facebook </p>
+						<p> Sign up with Facebook </p>
 					</Button>
 
 					<Button className="rounded-full gap-2 p-6">
 						<FontAwesomeIcon icon={faGoogle} size="xl" />
-						<p> Log in with Google </p>
+						<p> Sign up with Google </p>
 					</Button>
 
 					<div className="flex justify-center items-center gap-2 w-full">
 						<div className="w-full h-1 bg-gray-300" />
-
 						<h3 className="text-lg text-gray-400 uppercase"> Or </h3>
-
 						<div className="w-full h-1 bg-gray-300" />
 					</div>
 
@@ -89,7 +83,7 @@ export default function Home() {
 											<Input placeholder="shadcn" {...field} />
 										</FormControl>
 										<FormDescription>
-											This is your public display name.
+											Choose your unique username.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -105,15 +99,17 @@ export default function Home() {
 											<Input placeholder="abc1234" {...field} />
 										</FormControl>
 										<FormDescription>
-											This is your password for your account.
+											Choose a strong password for your account.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 
-							<Button type="submit" className="rounded-full w-full p-6"> Log in with email </Button>
-
+							<Button type="submit" className="rounded-full w-full p-6">
+								{" "}
+								Sign up with email{" "}
+							</Button>
 						</form>
 					</Form>
 				</div>
