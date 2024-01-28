@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleUserIcon, FacebookIcon } from "lucide-react";
+import { CircleUserIcon, FacebookIcon, GithubIcon } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,6 +19,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
 	username: z.string().min(2).max(50),
@@ -26,6 +27,9 @@ const formSchema = z.object({
 });
 
 export default function Home() {
+
+	const router = useRouter();
+
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -34,11 +38,21 @@ export default function Home() {
 		},
 	});
 
+	function googleSignIn() {
+
+		router.push("http://localhost:8080/login/oauth2/code/google");
+
+
+	}
+
+	function githubSignIn() {
+
+		router.push("http://localhost:8080/login/oauth2/code/github");
+	}
+
 	// 2. Define a submit handler.
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
-		console.log(values);
+
 	}
 
 	return (
@@ -58,13 +72,13 @@ export default function Home() {
 						</Link>{" "}
 					</p>
 
-					<Button className="rounded-full gap-2 p-6">
-						<FacebookIcon />
+					<Button className="rounded-full gap-2 p-6" onClick={githubSignIn}>
+						<GithubIcon />
 
-						<p> Log in with Facebook </p>
+						<p> Log in with Github </p>
 					</Button>
 
-					<Button className="rounded-full gap-2 p-6">
+					<Button className="rounded-full gap-2 p-6" onClick={googleSignIn}>
 						<FontAwesomeIcon icon={faGoogle} size="xl" />
 						<p> Log in with Google </p>
 					</Button>
