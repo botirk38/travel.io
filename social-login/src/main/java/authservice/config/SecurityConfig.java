@@ -14,16 +14,15 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
-            .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/").permitAll();
-                auth.requestMatchers("/favicon.ico").permitAll();
-                auth.anyRequest().authenticated();
-            })
-            .oauth2Login(withDefaults())
-            .formLogin(withDefaults())
-            .build();
-}
-
+        return http
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/").permitAll();
+                    auth.requestMatchers("/favicon.ico").permitAll();
+                    auth.anyRequest().authenticated();
+                })
+                .oauth2Login(withDefaults())
+                .formLogin(withDefaults())
+                .build();
+    }
 
 }
