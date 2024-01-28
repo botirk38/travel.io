@@ -1,7 +1,8 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from flask import json
 from dest_finder import app, process_gpt_response, generate_unique_id
+
 
 class TravelPlanTestCase(unittest.TestCase):
 
@@ -9,20 +10,37 @@ class TravelPlanTestCase(unittest.TestCase):
         self.app = app.test_client()
         self.app.testing = True
 
-    def test_find_destination_success(self):
-        with patch('app.client.chat.completions.create') as mock_create:
-            mock_create.return_value = type(
-                'obj', (object,), {
-                    "choices": [type('obj', (object,), {"message": type('obj', (object,), {"content": "Test Response"})})]
-                }
-            )
-            response = self.app.post('/submit-data', json={
-                "plan_name": "Test Plan",
-                "question1": "Answer1",
-                "question2": "Answer2"
-            })
-            self.assertEqual(response.status_code, 200)
-            self.assertIn("Test Response", response.get_data(as_text=True))
+
+    @patch('dest_finder.client.chat.completions.create')
+    @patch('dest_finder.process_gpt_response')  
+    @patch('dest_finder.save_travel_plan')  
+    def test_find_destination_success(self, mock_save_travel_plan, mock_process_gpt_response, mock_openai_create):
+
+        mock_openai_create.return_value.choices = [{
+            "message": {
+                "content": "Mocked response content"
+            }
+        }]
+
+        # Mock the processing of the response
+        mock_process_gpt_response.return_value = {"processed": "data"}
+
+        # Test data
+        test_data = {
+            "plan_name": "Test Plan",
+            "question1": "Answer1",
+            "question2": "Answer2"
+        }
+
+        # Make a POST request to the endpoint
+        response = self.app.post('/submit-data', json=test_data)
+        print(response.json)
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        mock_openai_create.assert_called_once()
+        mock_process_gpt_response.assert_called_once()
+        mock_save_travel_plan.assert_called_once_with({"processed": "data"})
 
     def test_process_gpt_response(self):
         mock_response = {
@@ -42,7 +60,7 @@ class TravelPlanTestCase(unittest.TestCase):
         }
         plan_name = "Test Plan"
         result = process_gpt_response(mock_response, plan_name)
-        
+
         self.assertIsInstance(result, dict)
         self.assertEqual(result["name"], plan_name)
         self.assertIn("destinations", result)
@@ -53,6 +71,6 @@ class TravelPlanTestCase(unittest.TestCase):
         self.assertIsInstance(unique_id, str)
         self.assertTrue(len(unique_id) > 0)
 
+
 if __name__ == '__main__':
     unittest.main()
-
