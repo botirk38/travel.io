@@ -76,14 +76,40 @@ def find_destination():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+    def save_travel_plan(planData):
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-def connect_db():
+    # Insert into Plans table
+    cursor.execute("INSERT INTO Plans (id, name) VALUES (%s, %s)",
+                   (planData['id'], planData['name']))
 
-    pass
+    for destination in planData['destinations']:
+        # Insert into Destinations table
+        cursor.execute("INSERT INTO Destinations (plan_id, name, description) VALUES (%s, %s, %s) RETURNING id",
+                       (planData['id'], destination['name'], destination['description']))
+        destination_id = cursor.fetchone()[0]
 
+        # Insert into related tables
+        for image in destination['images']:
+            cursor.execute(
+                "INSERT INTO Images (destination_id, image_url) VALUES (%s, %s)", (destination_id, image))
 
-def save_travel_plan(travel_plan):
-    pass
+        for video in destination['videos']:
+            cursor.execute(
+                "INSERT INTO Videos (destination_id, video_url) VALUES (%s, %s)", (destination_id, video))
+
+        for like in destination['likes']:
+            cursor.execute(
+                "INSERT INTO Likes (destination_id, like_item) VALUES (%s, %s)", (destination_id, like))
+
+        for wonder in destination['localWonders']:
+            cursor.execute("INSERT INTO LocalWonders (destination_id, name, image) VALUES (%s, %s, %s)",
+                           (destination_id, wonder['name'], wonder['image']))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 
 def process_gpt_response(response, plan_name):
