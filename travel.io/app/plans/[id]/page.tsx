@@ -23,6 +23,7 @@ import {
 
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import React from "react";
 
 export default function Page({ params }: { params: { id: string } }) {
 	const planData = {

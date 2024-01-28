@@ -1,0 +1,109 @@
+/* Header styles */
+header {
+    background-color: #333; /* Background color */
+    color: #fff; /* Text color */
+    padding: 20px; /* Padding for header content */
+  }
+  
+  .header-nav {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+  }
+  
+  .header-nav-item {
+    display: inline-block;
+    margin-right: 100px; /* Add spacing between navigation items */
+  }
+  
+  .header-nav-item:last-child {
+    margin-right: 0; /* Remove margin for the last item */
+  }
+  
+  .header-nav-item a {
+    text-decoration: none;
+    color: #fff; /* Link color */
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .header-nav-item a:hover {
+    text-decoration: underline; /* Add underline on hover */
+  }
+/* Button styles */
+.button-primary {
+    background-color: #007bff; /* Primary button background color */
+    color: #fff; /* Button text color */
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .button-primary:hover {
+    background-color: #0056b3; /* Change color on hover */
+  }
+  
+  .button-secondary {
+    background-color: #f4f4f4; /* Secondary button background color */
+    color: #333; /* Button text color */
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .button-secondary:hover {
+    background-color: #ddd; /* Change color on hover */
+  }
+
+/* Center the new card */
+
+  
+  /* Card styles */
+  .card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    max-width: 320px;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .card-content {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .button-primary {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .button-primary:hover {
+    background-color: #0056b3;
+  }
+  
