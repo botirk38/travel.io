@@ -1,38 +1,31 @@
-.App {
-  text-align: center;
+/* Add this CSS to your stylesheet */
+
+/* Style for the entire page */
+html,body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: Arial, sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Container for the map and content */
+.container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 400px;
+  width: 100%;
 }
 
-.App-link {
-  color: #61dafb;
+/* Style for the map container at the top */
+.map-container {
+  flex: 1;
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Style for the content below the map */
+.content {
+  background-color: #ffffff;
+  padding: 20px;
+  flex: 0;
 }
+
