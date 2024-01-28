@@ -40,14 +40,14 @@ export default function Home() {
 
 	function googleSignIn() {
 
-		router.push("http://localhost:8080/login/oauth2/code/google");
+		router.push("http://localhost:8080/oauth2/authorization/github");
 
 
 	}
 
 	function githubSignIn() {
 
-		router.push("http://localhost:8080/login/oauth2/code/github");
+		router.push("http://localhost:8080/oauth2/authorization/github");
 	}
 
 	// 2. Define a submit handler.
