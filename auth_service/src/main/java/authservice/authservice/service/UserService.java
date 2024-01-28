@@ -2,6 +2,7 @@ package authservice.authservice.service;
 
 import authservice.authservice.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +10,9 @@ import authservice.authservice.model.User;
 
 @Service
 public class UserService {
-
+    @Autowired
     private final UserRepository userRepository;
+    
     private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
