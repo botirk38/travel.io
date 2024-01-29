@@ -32,7 +32,7 @@ const questions = ["1.Do you want to relax or be on an adventure?", "How long do
 
 export default function PreviousPlansPage() {
   const [text, setText] = useState("");
-  const message = "HiBotir";
+  const message = "Hi Botir";
   
   useEffect(() => {
     let index = 0;
