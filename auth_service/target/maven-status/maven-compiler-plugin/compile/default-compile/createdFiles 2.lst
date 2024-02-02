@@ -1,0 +1,7 @@
+authservice/authservice/service/CustomUserDetailsService.class
+authservice/authservice/service/UserService.class
+authservice/authservice/repository/UserRepository.class
+authservice/authservice/AuthServiceApplication.class
+authservice/authservice/controller/OAuthController.class
+authservice/authservice/model/User.class
+authservice/authservice/controller/UserController.class

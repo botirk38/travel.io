@@ -15,9 +15,23 @@ public class User {
 
     @Column (nullable = false)
     private String password;
-    
+
     @Column (nullable = false, unique = true)
     private String email;
+
+    @Column (nullable = true)
+    private String phone;
+
+    @Column (nullable = true)
+    private String address;
+
+    @Column (nullable = true)
+    private String city;
+
+    @Column (nullable = true)
+    private String country;
+
+  
 
     public User(){
 
@@ -27,6 +41,16 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public User(String username, String password, String email, String phone, String address, String city, String country){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.city = city;
+        this.country = country;
     }
 
 
@@ -54,6 +78,38 @@ public class User {
 
     public void setEmail(String email){
         this.email = email;
+    }
+
+    public void setPhone(String phone){
+        this.phone = phone;
+    }
+
+    public String getPhone(){
+        return this.phone;
+    }
+
+    public void setAddress(String address){
+        this.address = address;
+    }
+
+    public String getAddress(){
+        return this.address;
+    }
+
+    public void setCity(String city){
+        this.city = city;
+    }
+
+    public String getCity(){
+        return this.city;
+    }
+
+    public void setCountry(String country){
+        this.country = country;
+    }
+
+    public String getCountry(){
+        return this.country;
     }
 
     @Override
