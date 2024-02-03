@@ -40,7 +40,7 @@ export default function Home() {
 
 	function googleSignIn() {
 
-		router.push("http://localhost:8080/oauth2/authorization/github");
+		router.push("http://localhost:8080/oauth2/authorization/google");
 
 
 	}

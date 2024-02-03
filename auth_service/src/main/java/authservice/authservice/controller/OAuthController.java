@@ -18,14 +18,10 @@ public class OAuthController {
     @Value("${spring.security.oauth2.client.registration.github.client-id}")
     private String githubClientId;
 
-    @Value("${spring.security.oauth2.client.registration.github.redirect-uri}")
-    private String githubRedirectUri;
-
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
-    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
-    private String googleRedirectUri;
+
 
     @GetMapping("/user")
     public Map<String, Object> user(@AuthenticationPrincipal Object principal) {

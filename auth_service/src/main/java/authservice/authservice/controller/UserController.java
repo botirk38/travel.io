@@ -28,6 +28,17 @@ public class UserController {
         return ResponseEntity.ok(registeredUser);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody User user) {
+        String jws = userService.loginUser(user);
+
+        if (jws == null) {
+            return ResponseEntity.status(401).build();
+        }
+        
+        return ResponseEntity.ok(jws);
+    }
+
     @GetMapping("/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username) {
         User user = userService.findByUsername(username);

@@ -1,7 +1,6 @@
 "use client";
 
-import { CircleUserIcon, FacebookIcon } from "lucide-react";
-import Image from "next/image";
+import { CircleUserIcon, FacebookIcon, GithubIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
@@ -19,11 +18,15 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { postSignup } from "@/api/signup/signup";
+
 
 const formSchema = z.object({
 	username: z.string().min(2).max(50),
 	password: z.string().min(2).max(50),
 });
+import { useMutation } from "react-query";
 
 export default function Home() {
 	// 1. Define your form.
@@ -34,11 +37,48 @@ export default function Home() {
 		},
 	});
 
+	const router = useRouter();
+
+	const mutation = useMutation((values: z.infer<typeof formSchema>) => postSignup(values));
+
+
+
 	// 2. Define a submit handler for sign-up.
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		// Handle the sign-up process here.
-		console.log(values);
+		mutation.mutate(values, {
+			onSuccess: (data) => {
+				// Handle a successful submission (e.g., navigate or show success message)
+				console.log('Signup successful', data);
+				router.push("")
+			},
+			onError: (error) => {
+				// Handle any error from the submission
+				console.error('Signup error', error);
+			},
+			// Optional: Do something after mutation is settled (success or failure)
+			onSettled: () => {
+				// This is run after onSuccess or onError is called
+			},
+		});
+
 	}
+
+
+	function googleSignIn() {
+
+		router.push("http://localhost:8080/oauth2/authorization/google");
+
+
+
+	}
+
+	function githubSignIn() {
+		router.push("http://localhost:8080/oauth2/authorization/github");
+
+
+	}
+
+
 
 	return (
 		<main className="flex justify-center items-center w-full min-h-screen">
@@ -55,14 +95,16 @@ export default function Home() {
 						</Link>{" "}
 					</p>
 
-					<Button className="rounded-full gap-2 p-6">
-						<FacebookIcon />
-						<p> Sign up with Facebook </p>
+
+					<Button className="rounded-full gap-2 p-6" onClick={githubSignIn}>
+						<GithubIcon />
+
+						<p> Log in with Github </p>
 					</Button>
 
-					<Button className="rounded-full gap-2 p-6">
+					<Button className="rounded-full gap-2 p-6" onClick={googleSignIn}>
 						<FontAwesomeIcon icon={faGoogle} size="xl" />
-						<p> Sign up with Google </p>
+						<p> Log in with Google </p>
 					</Button>
 
 					<div className="flex justify-center items-center gap-2 w-full">

@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: authservice.authservice.controller.OAuthControllerTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.479 s - in authservice.authservice.controller.OAuthControllerTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.881 s -- in authservice.authservice.controller.OAuthControllerTest

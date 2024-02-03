@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,6 +35,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser")
     @SuppressWarnings("null")
     public void testRegisterUser() throws Exception {
         Mockito.when(userService.registerUser(Mockito.any(User.class))).thenReturn(user);
@@ -46,6 +48,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testUser")
     @SuppressWarnings("null")
     public void testGetUser() throws Exception {
         Mockito.when(userService.findByUsername("username")).thenReturn(user);
