@@ -25,6 +25,7 @@ import { postSignup } from "@/api/signup/signup";
 const formSchema = z.object({
 	username: z.string().min(2).max(50),
 	password: z.string().min(2).max(50),
+	email: z.string().email().max(320),
 });
 import { useMutation } from "react-query";
 import { useToast } from "@/components/ui/use-toast";
@@ -35,6 +36,8 @@ export default function Home() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			username: "",
+			password: "",
+			email:"",
 		},
 	});
 
@@ -138,6 +141,24 @@ export default function Home() {
 									</FormItem>
 								)}
 							/>
+
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Email</FormLabel>
+										<FormControl>
+											<Input placeholder="shadcn" {...field} />
+										</FormControl>
+										<FormDescription>
+											Choose your unique email
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
 							<FormField
 								control={form.control}
 								name="password"
