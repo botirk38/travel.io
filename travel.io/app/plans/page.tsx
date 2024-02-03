@@ -11,7 +11,11 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import CustomPagination from "@/components/ui/CustomPagination";
-
+import MobileNav from "@/components/home/nav/MobileNav";
+import Nav from "@/components/home/nav/Nav";
+import { useQuery } from "react-query";
+import { OAuthUser } from "@/types/userTypes";
+import { getUserInfoClient } from "@/api/user/userInfoClient";
 
 
 export default function PreviousPlansPage() {
@@ -86,10 +90,17 @@ export default function PreviousPlansPage() {
 		setCurrentPage(pageNumber);
 	}
 
+	const {data} = useQuery('userInfo', getUserInfoClient);
+
 
 	return (
-		<main className="flex flex-col justify-center items-start lg:justify-start lg:min-h-screen">
-			<section className="flex flex-col justify-center items-center w-full gap-6 p-20 lg:grid lg:grid-cols-3 lg:p-10">
+		<main className="flex flex-col justify-center items-start gap-16 p-8 lg:p-10 lg:justify-start lg:min-h-screen">
+
+			<MobileNav data={data} />
+
+			<Nav data={data} />
+
+			<section className="flex flex-col justify-center items-center w-full gap-6  lg:grid lg:grid-cols-3 mt-10 ">
 				{currentPlans.map((plan) => (
 					<Card key={plan.id} className="w-full">
 						<CardHeader>
