@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import authservice.authservice.model.CustomUserDetails;
-import authservice.authservice.model.User;
+import authservice.authservice.model.jwt.CustomUserDetails;
+import authservice.authservice.model.jwt.User;
 import authservice.authservice.repository.UserRepository;
 
 @Service

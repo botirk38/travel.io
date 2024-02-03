@@ -1,4 +1,4 @@
-package authservice.authservice.model;
+package authservice.authservice.model.oauth;
 
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;

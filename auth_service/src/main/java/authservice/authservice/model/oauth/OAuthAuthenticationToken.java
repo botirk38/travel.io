@@ -1,4 +1,4 @@
-package authservice.authservice.model;
+package authservice.authservice.model.oauth;
 
 import java.util.Collection;
 

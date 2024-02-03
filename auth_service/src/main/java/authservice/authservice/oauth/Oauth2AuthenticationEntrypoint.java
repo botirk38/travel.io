@@ -1,4 +1,4 @@
-package authservice.authservice.config;
+package authservice.authservice.oauth;
 
 import java.io.IOException;
 

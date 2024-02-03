@@ -8,9 +8,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import authservice.authservice.jwt.JwtTokenProvider;
+import authservice.authservice.oauth.Oauth2AuthenticationEntrypoint;
+import authservice.authservice.oauth.Oauth2LoginSuccessHandler;
+
 @Configuration
 @EnableWebSecurity
 public class OAuthSecurityConfig {
+
+    private final JwtTokenProvider tokenProvider;
+
+    public OAuthSecurityConfig(JwtTokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
 
     @Bean
     PasswordEncoder passwordEncoder() {

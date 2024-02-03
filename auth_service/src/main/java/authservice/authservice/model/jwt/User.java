@@ -1,4 +1,4 @@
-package authservice.authservice.model;
+package authservice.authservice.model.jwt;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

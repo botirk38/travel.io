@@ -1,6 +1,6 @@
 package authservice.authservice.service;
 
-import authservice.authservice.model.User;
+import authservice.authservice.model.jwt.User;
 import authservice.authservice.repository.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
