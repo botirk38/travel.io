@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import authservice.authservice.jwt.JwtTokenProvider;
 import authservice.authservice.oauth.Oauth2AuthenticationEntrypoint;
 import authservice.authservice.oauth.Oauth2LoginSuccessHandler;
 
@@ -16,11 +15,7 @@ import authservice.authservice.oauth.Oauth2LoginSuccessHandler;
 @EnableWebSecurity
 public class OAuthSecurityConfig {
 
-    private final JwtTokenProvider tokenProvider;
-
-    public OAuthSecurityConfig(JwtTokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
+   
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -28,11 +23,11 @@ public class OAuthSecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChainOAuth(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/users/register", "/users/login").permitAll()
+                        .requestMatchers("/users/login", "/user/register").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandlingConfigurer -> {
                     exceptionHandlingConfigurer.authenticationEntryPoint(

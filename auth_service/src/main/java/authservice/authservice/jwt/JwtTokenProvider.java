@@ -46,7 +46,6 @@ public class JwtTokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.JwtException | IllegalArgumentException e) {
-            // Log or handle JWT validation exceptions (expired, invalid signature, etc.)
             return false;
         }
     }

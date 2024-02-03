@@ -58,19 +58,7 @@ public class UserControllerTest {
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(user)));
     }
 
-    @Test
-    @WithMockUser(username = "testUser")
-    public void testLoginUser() throws Exception {
-        String jws = "testJws";
-        Mockito.when(userService.loginUser(Mockito.any(User.class))).thenReturn(jws);
-
-        mockMvc.perform(post("/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(user)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(jws));
-    }
-
+    @SuppressWarnings("null")
     @Test
     @WithMockUser(username = "testUser")
     public void testLoginUserUnauthorized() throws Exception {
@@ -89,5 +77,40 @@ public class UserControllerTest {
 
         mockMvc.perform(get("/users/username"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "testUser")
+    public void testRegisterUserAlreadyExists() throws Exception {
+        Mockito.when(userService.findByUsername(Mockito.anyString())).thenReturn(new User());
+
+        mockMvc.perform(post("/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username = "testUser")
+    public void testLoginUser() throws Exception {
+        String jws = "fakeToken";
+        Mockito.when(userService.loginUser(Mockito.any(User.class))).thenReturn(jws);
+
+        mockMvc.perform(post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().isOk())
+                .andExpect(cookie().exists("auth_token"))
+                .andExpect(cookie().value("auth_token", jws));
+    }
+
+    @Test
+    @WithMockUser(username = "testUser")
+    public void testGetUserByUsername() throws Exception {
+        Mockito.when(userService.findByUsername("username")).thenReturn(user);
+
+        mockMvc.perform(get("/users/{username}", "username"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(user)));
     }
 }
