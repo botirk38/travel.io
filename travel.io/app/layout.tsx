@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReactQueryProvider } from "@/context/ReactQueryProvider";
+import { Toaster } from "@/components/ui/toaster"
 
 
 // Create a client
@@ -26,6 +27,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           {children}
         </ReactQueryProvider>
+        <Toaster />
       </body>
     </html>
   );

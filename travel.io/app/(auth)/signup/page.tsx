@@ -27,6 +27,7 @@ const formSchema = z.object({
 	password: z.string().min(2).max(50),
 });
 import { useMutation } from "react-query";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Home() {
 	// 1. Define your form.
@@ -37,28 +38,34 @@ export default function Home() {
 		},
 	});
 
+	const { toast } = useToast();
+
 	const router = useRouter();
 
 	const mutation = useMutation((values: z.infer<typeof formSchema>) => postSignup(values));
 
 
 
-	// 2. Define a submit handler for sign-up.
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		mutation.mutate(values, {
 			onSuccess: (data) => {
-				// Handle a successful submission (e.g., navigate or show success message)
 				console.log('Signup successful', data);
+				toast({
+					title: "Signup Successful",
+					description: "Redirecting to Login"
+
+
+				})
 				router.push("")
 			},
 			onError: (error) => {
-				// Handle any error from the submission
-				console.error('Signup error', error);
+				toast({
+					title: "Signup failed",
+					description: "Please try again."
+				})
+				console.error('Signup error form', error);
 			},
 			// Optional: Do something after mutation is settled (success or failure)
-			onSettled: () => {
-				// This is run after onSuccess or onError is called
-			},
 		});
 
 	}

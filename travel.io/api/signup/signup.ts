@@ -12,12 +12,12 @@ export const postSignup = async (values: z.infer<typeof formSchema>) => {
 	const { signal } = controller;
 
 	try {
-		const response = await fetch('https://localhost:8080/users/register', {
+		const response = await fetch('http://localhost:8080/users/register', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(values),
 			signal,
-		}); // Timeout after 5000ms
+		});
 
 		if (!response.ok) {
 			throw new Error(`Server responded with ${response.status}: ${response.statusText}`);

@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
 	username: z.string().min(2).max(50),
@@ -29,6 +30,8 @@ const formSchema = z.object({
 export default function Home() {
 
 	const router = useRouter();
+
+	const {toast} = useToast();
 
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof formSchema>>({
