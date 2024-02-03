@@ -1,5 +1,6 @@
 package authservice.authservice.service;
 
+import authservice.authservice.model.jwt.User;
 import authservice.authservice.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -8,7 +9,7 @@ import java.security.Key;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import authservice.authservice.model.User;
+
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service

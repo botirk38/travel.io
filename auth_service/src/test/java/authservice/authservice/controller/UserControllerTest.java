@@ -1,6 +1,6 @@
 package authservice.authservice.controller;
 
-import authservice.authservice.model.User;
+import authservice.authservice.model.jwt.User;
 import authservice.authservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
