@@ -45,7 +45,7 @@ export default function Plans() {
 
 		<section className="w-full">
 
-			<div className="flex justify-start items-center gap-2 p-2">
+			<div className="flex justify-start items-center gap-2 p-2 md:justify-between md:w-full">
 
 				<FontAwesomeIcon icon={faBook} className="" />
 
