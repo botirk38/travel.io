@@ -25,7 +25,7 @@ export function MobileMenu() {
 
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56">
-				<DropdownMenuLabel>Travel.io</DropdownMenuLabel>
+				<DropdownMenuLabel><Link href={"/home"}>Travel.io</Link></DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
 					<DropdownMenuItem>

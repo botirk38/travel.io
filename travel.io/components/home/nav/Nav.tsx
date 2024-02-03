@@ -2,6 +2,8 @@ import { ProfileMenu } from "./components/ProfileMenu";
 import NavLinks from "./components/NavLinks";
 import { OAuthUser } from "@/types/userTypes";
 
+import Link from "next/link";
+
 export type LinkType = {
 	text: string;
 	href: string;
@@ -30,7 +32,7 @@ export default function Nav({ data } : NavProps) {
 
 	return (
 		<nav className="hidden md:flex items-center justify-between w-full">
-			<h1 className="font-bold text-2xl text-blue-500">Travel.io</h1>
+			<h1 className="font-bold text-2xl text-blue-500"><Link href="/home">Travel.io </Link></h1>
 			<NavLinks links={links}  />
 			<ProfileMenu data={data} />
 		</nav>
