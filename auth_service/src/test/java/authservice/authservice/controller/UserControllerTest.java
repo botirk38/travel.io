@@ -57,4 +57,37 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(user)));
     }
+
+    @Test
+    @WithMockUser(username = "testUser")
+    public void testLoginUser() throws Exception {
+        String jws = "testJws";
+        Mockito.when(userService.loginUser(Mockito.any(User.class))).thenReturn(jws);
+
+        mockMvc.perform(post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().isOk())
+                .andExpect(content().string(jws));
+    }
+
+    @Test
+    @WithMockUser(username = "testUser")
+    public void testLoginUserUnauthorized() throws Exception {
+        Mockito.when(userService.loginUser(Mockito.any(User.class))).thenReturn(null);
+
+        mockMvc.perform(post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "testUser")
+    public void testGetUserNotFound() throws Exception {
+        Mockito.when(userService.findByUsername("username")).thenReturn(null);
+
+        mockMvc.perform(get("/users/username"))
+                .andExpect(status().isNotFound());
+    }
 }

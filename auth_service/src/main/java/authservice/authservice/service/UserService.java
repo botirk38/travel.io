@@ -3,6 +3,7 @@ package authservice.authservice.service;
 import authservice.authservice.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,8 +46,14 @@ public class UserService {
         return null;
     }
 
+    public void validateToken(String token, Key secretKey) {
+        Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
+    }
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
+
+    
 
 }

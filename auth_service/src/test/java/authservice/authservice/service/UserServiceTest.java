@@ -8,11 +8,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import java.security.Key;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceTest {
 
@@ -54,6 +61,17 @@ public class UserServiceTest {
         User result = userService.findByUsername(user.getUsername());
 
         assertEquals(user, result);
+    }
+
+    @Test
+    public void testValidateToken() {
+        Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        String validToken = Jwts.builder().setSubject("test").signWith(secretKey)
+                .compact();
+        String invalidToken = "invalidToken";
+
+        assertDoesNotThrow(() -> userService.validateToken(validToken, secretKey));
+        assertThrows(Exception.class, () -> userService.validateToken(invalidToken, secretKey));
     }
 
     @Test
