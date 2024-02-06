@@ -1,7 +1,9 @@
 package authservice.authservice.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,8 +18,9 @@ import authservice.authservice.oauth.Oauth2LoginSuccessHandler;
 @Configuration
 @EnableWebSecurity
 public class OAuthSecurityConfig {
-
+    @Autowired
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
     public OAuthSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -29,6 +32,19 @@ public class OAuthSecurityConfig {
     }
 
     @Bean
+    @Order(1)
+    SecurityFilterChain filterChainJWT(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/users/login", "/user/register").permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
     SecurityFilterChain filterChainOAuth(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
@@ -42,8 +58,7 @@ public class OAuthSecurityConfig {
                 .oauth2Login(customizer -> {
                     customizer
                             .successHandler(new Oauth2LoginSuccessHandler());
-                })
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                });
         return http.build();
     }
 
