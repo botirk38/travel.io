@@ -7,14 +7,10 @@ import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
-    private String username;
-    private String password;
-    private String email;
+    private User user;
 
     public CustomUserDetails(User user) {
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.email = user.getEmail();
+        this.user = user;
     }
 
     @Override
@@ -24,16 +20,16 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return this.user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.user.getUsername();
     }
 
     public String getEmail() {
-        return this.email;
+        return this.user.getEmail();
     }
 
     @Override

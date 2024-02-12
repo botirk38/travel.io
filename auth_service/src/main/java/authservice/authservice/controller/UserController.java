@@ -2,73 +2,81 @@ package authservice.authservice.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.RememberMeServices;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import authservice.authservice.model.jwt.User;
 import authservice.authservice.service.UserService;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private RememberMeServices remememberMeServices;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+
+        if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null) {
+            return ResponseEntity.badRequest().body("Username, password and email are required");
+        }
 
         if (userService.findByUsername(user.getUsername()) != null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Username already exists");
         }
 
         if (userService.findByEmail(user.getEmail()) != null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Email already exists");
         }
 
         else {
-            User registeredUser = userService.registerUser(user);
-            return ResponseEntity.ok(registeredUser);
+            userService.registerUser(user);
+            return ResponseEntity.ok(Map.of("message", "User registered successfully"));
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user, jakarta.servlet.http.HttpServletResponse response) {
-        String jws = userService.loginUser(user);
+    public ResponseEntity<?> loginUser(@RequestBody User user, HttpServletRequest request,
+            HttpServletResponse response) {
 
-        if (jws == null) {
-            return ResponseEntity.status(401).build();
+        if (user.getUsername() == null || user.getPassword() == null) {
+            return ResponseEntity.badRequest().body("Username and password are required");
         }
 
-        Cookie cookie = new Cookie("auth_token", jws);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(user.getUsername(),
+                user.getPassword());
+        Authentication authenticationResult = authenticationManager.authenticate(authenticationRequest);
 
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{username}")
-    public ResponseEntity<User> getUser(@PathVariable String username) {
-        User user = userService.findByUsername(username);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
+        if (authenticationResult == null) {
+            return ResponseEntity.badRequest().body("Login failed.");
         }
+
+        remememberMeServices.loginSuccess(request, response, authenticationResult);
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationResult);
+
+        return ResponseEntity.ok(Map.of("message", "Login successful"));
+
     }
 
 }

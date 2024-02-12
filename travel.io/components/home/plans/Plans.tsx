@@ -47,7 +47,7 @@ export default function Plans() {
 
 			<div className="flex justify-start items-center gap-2 p-2 md:justify-between md:w-full">
 
-				<FontAwesomeIcon icon={faBook} className="" />
+				<FontAwesomeIcon icon={faBook} className="w-6 h-6" />
 
 				<Button variant={"link"} className="p-0" > <Link href="/plans" className="underline text-blue-500">View All </Link> </Button>
 

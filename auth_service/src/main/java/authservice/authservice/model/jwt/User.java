@@ -1,5 +1,7 @@
 package authservice.authservice.model.jwt;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +17,7 @@ public class User {
     private Long id;
     
     @Column (nullable = false, unique = true)
+    @JsonProperty("name")
     private String username;
 
     @Column (nullable = false)
@@ -24,16 +27,15 @@ public class User {
     private String email;
 
     @Column (nullable = true)
+    @JsonProperty("phoneNumber")
     private String phone;
 
     @Column (nullable = true)
     private String address;
 
     @Column (nullable = true)
-    private String city;
+    private String birthdate;
 
-    @Column (nullable = true)
-    private String country;
 
   
 
@@ -47,14 +49,14 @@ public class User {
         this.email = email;
     }
 
-    public User(String username, String password, String email, String phone, String address, String city, String country){
+    public User(String username, String password, String email, String phone, String address, String birthdate){
         this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.city = city;
-        this.country = country;
+        this.birthdate = birthdate;
+      
     }
 
 
@@ -100,21 +102,15 @@ public class User {
         return this.address;
     }
 
-    public void setCity(String city){
-        this.city = city;
+    public void setBirthdate(String birthdate){
+        this.birthdate = birthdate;
     }
 
-    public String getCity(){
-        return this.city;
+    public String getBirthdate(){
+        return this.birthdate;
     }
 
-    public void setCountry(String country){
-        this.country = country;
-    }
-
-    public String getCountry(){
-        return this.country;
-    }
+ 
 
     @Override
     public boolean equals(Object o) {

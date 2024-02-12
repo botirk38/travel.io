@@ -1,14 +1,15 @@
 package authservice.authservice.model.oauth;
 
-import java.util.Date;
 
 import org.springframework.security.oauth2.core.oidc.AddressStandardClaim;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class OAuthUser {
 
     private String id;
@@ -18,6 +19,10 @@ public class OAuthUser {
     private AddressStandardClaim address;
     private String birthdate;
     private String phoneNumber;
+
+
+
+    
 
     public static OAuthUser fromGoogleUser(DefaultOidcUser OAuthUser) {
         OAuthUser appUser = new OAuthUser();
