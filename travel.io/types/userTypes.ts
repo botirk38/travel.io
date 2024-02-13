@@ -16,6 +16,7 @@ export type OAuthUser = {
 
 export type SpringUser = {
 
+  id: string;
   authorities: [];
   email: string;
   phone?: string; 

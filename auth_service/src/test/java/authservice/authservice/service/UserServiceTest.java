@@ -68,6 +68,7 @@ public class UserServiceTest {
         assertEquals(user, result);
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testUpdateUser() {
         User currentUser = new User();
@@ -102,6 +103,7 @@ public class UserServiceTest {
         verify(userRepository, times(1)).save(currentUser);
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testUpdateUserNoChanges() {
         User currentUser = new User();
@@ -132,6 +134,7 @@ public class UserServiceTest {
 
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testUpdateUserNoChangesWithNullFields() {
         User currentUser = new User();
@@ -157,6 +160,7 @@ public class UserServiceTest {
 
 }
 
+    @SuppressWarnings("null")
     @Test
     public void testUpdateUserWithNullFields() {
         User currentUser = new User();
@@ -186,6 +190,7 @@ public class UserServiceTest {
 
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testUpdateUserWithOneChange() {
         User currentUser = new User();
@@ -213,5 +218,7 @@ public class UserServiceTest {
 
         verify(userRepository, times(1)).save(any(User.class));
     }
+
+   
 
 }

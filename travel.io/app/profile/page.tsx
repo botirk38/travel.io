@@ -3,12 +3,13 @@ import { ProfileForm } from "./profile-form"
 import AuthenticationGuard from "@/components/ui/AuthenticationGuard"
 import { getUserInfo } from "@/api/user/userInfo"
 
-export default async  function SettingsProfilePage() {
+export default async function SettingsProfilePage() {
 
-  const userInfo  = await getUserInfo();
+  const userInfo = await getUserInfo();
 
 
   return (
+    <AuthenticationGuard>
       <div className="space-y-6">
         <div>
           <h3 className="text-lg font-medium">Profile</h3>
@@ -19,6 +20,8 @@ export default async  function SettingsProfilePage() {
         <Separator />
         <ProfileForm data={userInfo} />
       </div>
+
+    </AuthenticationGuard>
 
   )
 }

@@ -24,7 +24,6 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 const formSchema = z.object({
 	username: z.string().min(2).max(50),
-	name: z.string().min(2).max(50),
 	password: z.string().min(2).max(50),
 	email: z.string().email().max(320),
 });
@@ -37,7 +36,6 @@ export default function Home() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			username: "",
-			name: "",
 			password: "",
 			email: "",
 		},

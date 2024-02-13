@@ -35,6 +35,12 @@ public class CustomUserDetails implements UserDetails {
         return user.getBirthdate();
     }
 
+    public Long getId() {
+        return user.getId();
+    }
+
+
+
    
 
 

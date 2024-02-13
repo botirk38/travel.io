@@ -14,6 +14,7 @@ export async function getUserInfo() {
 				'Cookie': `JSESSIONID=${JSSESSION?.value}`
 			},
 			method: 'GET',
+			cache: 'no-store',
 		});
 
 		if (!response.ok) {

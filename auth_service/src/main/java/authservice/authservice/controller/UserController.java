@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -45,8 +46,6 @@ public class UserController {
 
     @Autowired
     private OAuthUserService oauthUserService;
-
-   
 
     @GetMapping("/me")
     public ResponseEntity<?> oauth() {
@@ -100,21 +99,35 @@ public class UserController {
         }
     }
 
-    @PostMapping("/update-profile")
-    public ResponseEntity<?> updateProfile(@RequestBody User updatedUser) {
+    @PostMapping("/update-profile/{id}")
+    public ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody User updatedUser) {
+        // Fetch the authenticated user's username
+        String authenticatedUsername = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (updatedUser.getUsername() == null || updatedUser.getEmail() == null) {
-            return ResponseEntity.badRequest().body("Username, name and email are required");
+        if (principal instanceof UserDetails) {
+            authenticatedUsername = ((UserDetails) principal).getUsername();
+        } else {
+            // Handle error or throw an exception as needed
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
         }
 
-        if (principal instanceof User) {
-            User currentUser = (User) principal;
-            // Validate and update the User
-             userService.updateUser(currentUser, updatedUser);
-        }  else {
-            return ResponseEntity.badRequest().body("Unknown user type");
+        // Fetch the current user entity based on the authenticated username
+        User currentUser = userService.findByUsername(authenticatedUsername);
+
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Current user not found");
         }
+
+        // Check if the ID matches the current user's ID
+        if (!currentUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You're not authorized to update this profile");
+        }
+
+        if (updatedUser.getUsername() == null || updatedUser.getEmail() == null || updatedUser.getPhone() == null) {
+            return ResponseEntity.badRequest().body("Username and email are required");
+        }
+
+        userService.updateUser(currentUser, updatedUser);
 
         return ResponseEntity.ok(Map.of("message", "Profile updated successfully"));
     }
@@ -123,7 +136,8 @@ public class UserController {
     public ResponseEntity<?> updateOAuthProfile(@RequestBody OAuthUser updatedUser) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (updatedUser.getUsername() == null || updatedUser.getEmail() == null || updatedUser.getName() == null) {
+        if (updatedUser.getUsername() == null || updatedUser.getEmail() == null || updatedUser.getName() == null
+                || updatedUser.getBirthdate() == null || updatedUser.getPhoneNumber() == null) {
             return ResponseEntity.badRequest().body("Username, name and email are required");
         }
 

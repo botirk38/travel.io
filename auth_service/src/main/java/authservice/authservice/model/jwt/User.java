@@ -28,7 +28,6 @@ public class User implements IUser{
     private String email;
 
     @Column (nullable = true)
-    @JsonProperty("phoneNumber")
     private String phone;
 
     @Column (nullable = true)

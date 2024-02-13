@@ -18,6 +18,9 @@ import { Input } from "@/components/ui/input"
 
 import { toast } from "@/components/ui/use-toast"
 import { OAuthUser, SpringUser } from "@/types/userTypes"
+import { useRouter } from "next/navigation"
+import { updateProfile } from "@/api/profile/updateProfile"
+import { useMutation } from "react-query"
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -38,25 +41,30 @@ const profileFormSchema = z.object({
     })
     .email(),
 
-  name: z.string({ required_error: "Please enter a name" }),
-
   phone: z.string().regex(phoneRegex, 'Invalid Phone number'),
   address: z.string({ required_error: "Please enter a valid address" }).min(1),
+  password: z.string().min(4).optional(),
+  id: z.string().optional()
 })
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>
+export type ProfileFormValues = z.infer<typeof profileFormSchema>
 
-// This can come from your database or API.
 
 
 export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
 
+  const router = useRouter();
+
+
+
+
   const defaultValues: Partial<ProfileFormValues> = {
 
-    username: data.username,
-    email: data.email,
-    phone: data.phone,
-    address: data.address
+    username: data?.username,
+    email: data?.email,
+    phone: data?.phone,
+    address: data?.address,
+    password: data?.password, 
 
   }
 
@@ -66,22 +74,42 @@ export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
     mode: "onChange",
   })
 
+  const mutation = useMutation((values: ProfileFormValues) => updateProfile(values));
+
+  function onSubmit(values: ProfileFormValues) {
+
+    values = { id: data.id, ...values }
+
+    mutation.mutate(values, {
+      onSuccess: (values: ProfileFormValues) => {
+        console.log('Signup successful', values);
+        toast({
+          title: "Profile was updated successfully.",
+          description: "Refreshing page"
+
+
+        })
+        router.push("/profile");
+      },
+      onError: (error: any) => {
+
+        console.log("Values: ", values);
+        toast({
+          title: "Profile update failed",
+          description: "Please try again."
+        })
+        console.error('Login error form', error);
+      },
+    });
 
 
 
 
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+    router.push("/profile");
   }
 
   console.log(data);
+
 
   return (
     <Form {...form}>
@@ -93,7 +121,7 @@ export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} value={data.username} />
+                <Input placeholder="shadcn" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a
@@ -103,6 +131,24 @@ export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input placeholder="password" {...field}  value={""}/>
+              </FormControl>
+              <FormDescription>
+                This is your password, keep it secret.              
+                </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="email"
@@ -110,7 +156,7 @@ export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn@shadcn.com" {...field} value={data.email} />
+                <Input placeholder="shadcn@shadcn.com" {...field} />
 
               </FormControl>
 
@@ -131,7 +177,7 @@ export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="+44 123456789" {...field} value={data.phone} />
+                <Input placeholder="+44 123456789" {...field} />
 
               </FormControl>
 
@@ -150,7 +196,7 @@ export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input placeholder="Canary Wharf" {...field} value={data.address} />
+                <Input placeholder="Canary Wharf" {...field} />
 
               </FormControl>
 

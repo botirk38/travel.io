@@ -31,9 +31,6 @@ public class OAuthUser implements IUser {
     private String phoneNumber;
 
 
-
-    
-
     public static OAuthUser fromGoogleUser(DefaultOidcUser OAuthUser) {
         OAuthUser appUser = new OAuthUser();
         appUser.id = OAuthUser.getSubject();

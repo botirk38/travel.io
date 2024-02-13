@@ -35,43 +35,53 @@ public class UserService {
 
     public void updateUser(User currentUser, User updatedUser) {
         boolean isModified = false;
+
+        if (currentUser == null || updatedUser == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
     
-        if (!currentUser.getUsername().equals(updatedUser.getUsername())) {
+        // Check and update password
+        if(updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            isModified = true; // Assuming you want to mark as modified if password changes
+        }
+        
+        // Username
+        if (updatedUser.getUsername() != null && !updatedUser.getUsername().equals(currentUser.getUsername())) {
             currentUser.setUsername(updatedUser.getUsername());
             isModified = true;
         }
-    
-        if (!currentUser.getEmail().equals(updatedUser.getEmail())) {
+        
+        // Email
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().equals(currentUser.getEmail())) {
             currentUser.setEmail(updatedUser.getEmail());
             isModified = true;
         }
     
-        if (!passwordEncoder.matches(updatedUser.getPassword(), currentUser.getPassword())) {
-            currentUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-            isModified = true;
-        }
-
-        if(!currentUser.getPhone().equals(updatedUser.getPhone())){
+        // Phone
+        if (updatedUser.getPhone() != null && !updatedUser.getPhone().equals(currentUser.getPhone())) {
             currentUser.setPhone(updatedUser.getPhone());
             isModified = true;
         }
-
-        if(!currentUser.getAddress().equals(updatedUser.getAddress())){
+    
+        // Address
+        if (updatedUser.getAddress() != null && !updatedUser.getAddress().equals(currentUser.getAddress())) {
             currentUser.setAddress(updatedUser.getAddress());
             isModified = true;
         }
-
-        if(!currentUser.getBirthdate().equals(updatedUser.getBirthdate())){
+    
+        // Birthdate
+        if (updatedUser.getBirthdate() != null && !updatedUser.getBirthdate().equals(currentUser.getBirthdate())) {
             currentUser.setBirthdate(updatedUser.getBirthdate());
             isModified = true;
         }
-
-       
     
+        // Save changes if any field was modified
         if (isModified) {
             userRepository.save(currentUser);
         }
     }
+    
 
     
 
