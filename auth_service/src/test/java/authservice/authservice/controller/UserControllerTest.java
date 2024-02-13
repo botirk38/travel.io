@@ -49,7 +49,7 @@ public class UserControllerTest {
     @SuppressWarnings("null")
     @Test
     public void registerUser_Success() throws Exception {
-        User user = new User("testUser", "password", "test@example.com", "name");
+        User user = new User("testUser", "password", "test@example.com");
 
         mockMvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -63,7 +63,7 @@ public class UserControllerTest {
     @SuppressWarnings("null")
     @Test
     public void registerUser_Fail_UsernameExists() throws Exception {
-        User user = new User("testUser", "password", "test@example.com", "name");
+        User user = new User("testUser", "password", "test@example.com");
 
         when(userService.findByUsername(user.getUsername())).thenReturn(new User());
 
@@ -79,7 +79,7 @@ public class UserControllerTest {
     @SuppressWarnings("null")
     @Test
     public void loginUser_Success() throws Exception {
-        User user = new User("testUser", "password", null, "name");
+        User user = new User("testUser", "password", null);
 
         Authentication authentication = mock(Authentication.class);
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(authentication);

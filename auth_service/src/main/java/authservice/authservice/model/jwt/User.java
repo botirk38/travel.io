@@ -20,8 +20,6 @@ public class User implements IUser{
     @Column (nullable = false, unique = true)
     private String username;
 
-    @Column (nullable = false)
-    private String name;
 
     @Column (nullable = false)
     private String password;
@@ -46,11 +44,11 @@ public class User implements IUser{
 
     }
 
-    public User(String username, String password, String email, String name){
+    public User(String username, String password, String email){
         this.username = username;
         this.password = password;
         this.email = email;
-        this.name = name;
+
     }
 
     public User(String username, String password, String email, String phone, String address, String birthdate){
@@ -114,13 +112,15 @@ public class User implements IUser{
         return this.birthdate;
     }
 
-    public String getName(){
-        return this.name;
+    public Long getId(){
+        return this.id;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setId(Long id){
+        this.id = id;
     }
+
+  
 
  
 

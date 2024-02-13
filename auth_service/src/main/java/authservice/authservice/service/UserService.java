@@ -66,10 +66,7 @@ public class UserService {
             isModified = true;
         }
 
-        if(!currentUser.getName().equals(updatedUser.getName())){
-            currentUser.setName(updatedUser.getName());
-            isModified = true;
-        }
+       
     
         if (isModified) {
             userRepository.save(currentUser);

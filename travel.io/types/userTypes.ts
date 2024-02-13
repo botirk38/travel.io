@@ -3,12 +3,12 @@
 export type OAuthUser = {
 
   id: string;
-  name: string;
+  username: string;
   email: string;
   imageUrl: string;
   address: any;
   birthDate: string;
-  phoneNumber: string;
+  phone: string;
 
 
 
@@ -18,7 +18,7 @@ export type SpringUser = {
 
   authorities: [];
   email: string;
-  phone: string | null;
+  phone?: string; 
   username: string;
   dob: string | null;
   credentialsNonExpired: boolean;

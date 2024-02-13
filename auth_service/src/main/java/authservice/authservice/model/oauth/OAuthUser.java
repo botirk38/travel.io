@@ -5,6 +5,8 @@ import org.springframework.security.oauth2.core.oidc.AddressStandardClaim;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import authservice.authservice.model.IUser;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,12 +20,14 @@ import lombok.Setter;
 public class OAuthUser implements IUser {
     @Id
     private String id;
+    @JsonProperty("username")
     private String name;
     private String email;
     private String imageUrl;
     @Transient
     private AddressStandardClaim address;
     private String birthdate;
+    @JsonProperty("phone")
     private String phoneNumber;
 
 

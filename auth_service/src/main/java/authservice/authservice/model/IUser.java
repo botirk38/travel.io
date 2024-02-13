@@ -5,8 +5,7 @@ public interface IUser {
     void setUsername(String username);
     String getEmail();
     void setEmail(String email);
-    String getName();
-    void setName(String name);
+ 
 
 
 }

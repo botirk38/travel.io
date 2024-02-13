@@ -35,9 +35,7 @@ public class CustomUserDetails implements UserDetails {
         return user.getBirthdate();
     }
 
-    public String getName() {
-        return user.getName();
-    }
+   
 
 
 

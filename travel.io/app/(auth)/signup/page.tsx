@@ -158,25 +158,7 @@ export default function Home() {
 										<FormMessage />
 									</FormItem>
 								)}
-							/>
-
-								<FormField
-								control={form.control}
-								name="name"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Full Name</FormLabel>
-										<FormControl>
-											<Input placeholder="shadcn" {...field} />
-										</FormControl>
-										<FormDescription>
-											Tell us your name!
-											
-										</FormDescription>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+							/>	
 
 							<FormField
 								control={form.control}

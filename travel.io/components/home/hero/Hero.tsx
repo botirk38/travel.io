@@ -16,7 +16,7 @@ export default function Hero({ data }: HeroProps) {
 
 	const words = [
 		{ text: 'Welcome' },
-		{ text: `${data?.name}.` },
+		{ text: `${data?.username}.` },
 		{ text: 'Build' },
 		{ text: 'a' },
 		{ text: 'better' },

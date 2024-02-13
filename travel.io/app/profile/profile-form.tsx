@@ -1,11 +1,9 @@
 "use client"
 
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -17,14 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+
 import { toast } from "@/components/ui/use-toast"
 import { OAuthUser, SpringUser } from "@/types/userTypes"
 
@@ -50,28 +41,32 @@ const profileFormSchema = z.object({
   name: z.string({ required_error: "Please enter a name" }),
 
   phone: z.string().regex(phoneRegex, 'Invalid Phone number'),
-  address: z.string({ required_error: "Please enter a valid address"}).min(1),
+  address: z.string({ required_error: "Please enter a valid address" }).min(1),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 // This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
 
-  username: "",
-  email: "",
-  name: "",
-  phone: "",
-  address: "",
 
-}
+export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
 
-export function ProfileForm({data} : {data :SpringUser & OAuthUser}) {
+  const defaultValues: Partial<ProfileFormValues> = {
+
+    username: data.username,
+    email: data.email,
+    phone: data.phone,
+    address: data.address
+
+  }
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   })
+
+
 
 
 
@@ -98,7 +93,7 @@ export function ProfileForm({data} : {data :SpringUser & OAuthUser}) {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} value={data.username ? data.username : data.name} />
+                <Input placeholder="shadcn" {...field} value={data.username} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a
@@ -127,24 +122,6 @@ export function ProfileForm({data} : {data :SpringUser & OAuthUser}) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Jack Johnson" {...field} />
-
-              </FormControl>
-
-              <FormDescription>
-                You can manage your registered name here
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
 
         <FormField
@@ -178,7 +155,7 @@ export function ProfileForm({data} : {data :SpringUser & OAuthUser}) {
               </FormControl>
 
               <FormDescription>
-                You can manage your address here 
+                You can manage your address here
               </FormDescription>
               <FormMessage />
             </FormItem>

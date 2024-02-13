@@ -82,8 +82,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
 
-        if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null
-                || user.getName() == null) {
+        if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null) {
             return ResponseEntity.badRequest().body("Username, password, name and email are required");
         }
 
@@ -105,7 +104,7 @@ public class UserController {
     public ResponseEntity<?> updateProfile(@RequestBody User updatedUser) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (updatedUser.getUsername() == null || updatedUser.getEmail() == null || updatedUser.getName() == null) {
+        if (updatedUser.getUsername() == null || updatedUser.getEmail() == null) {
             return ResponseEntity.badRequest().body("Username, name and email are required");
         }
 
