@@ -1,16 +1,13 @@
 export async function getUserInfoClient() {
 
-	const controller = new AbortController();
-	const { signal } = controller;
 
 	try {
-		const response = await fetch('http://localhost:8080/oauth/me', {
+		const response = await fetch('http://localhost:8080/users/me', {
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			method: 'GET',
 			credentials: 'include',
-			signal,
 		});
 
 		if (!response.ok) {

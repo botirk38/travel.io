@@ -3,21 +3,21 @@ import { cookies } from "next/headers";
 export async function getUserInfo() {
 	const cookieStore = cookies();
 	const JSSESSION = cookieStore.get('JSESSIONID')
+	console.log(JSSESSION);
 
-	const controller = new AbortController();
-	const { signal } = controller;
+
 
 	try {
-		const response = await fetch('http://localhost:8080/oauth/me', {
+		const response = await fetch('http://localhost:8080/users/me', {
 			headers: {
 				'Content-Type': 'application/json',
 				'Cookie': `JSESSIONID=${JSSESSION?.value}`
 			},
 			method: 'GET',
-			signal,
 		});
 
 		if (!response.ok) {
+			console.error(await response.text());
 			return null;			
 		}
 

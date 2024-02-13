@@ -26,7 +26,7 @@ export function ProfileMenu( {data} ) {
 	}
 
 	function getFirstLetterOfLastname(name: string) {
-		return name?.split(' ')[1].substring(0, 1);
+		return name?.split(' ')[1]?.substring(0, 1);
 	}
 
 

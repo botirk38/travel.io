@@ -1,6 +1,8 @@
 package authservice.authservice.oauth;
 
 import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -9,6 +11,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import authservice.authservice.model.oauth.OAuthAuthenticationToken;
 import authservice.authservice.model.oauth.OAuthUser;
+import authservice.authservice.repository.OAuthUserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Oauth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+
+    @Autowired
+    private OAuthUserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -33,6 +39,7 @@ public class Oauth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         if (appUser != null) {
+            userRepository.save(appUser);
             OAuthAuthenticationToken token = new OAuthAuthenticationToken(appUser);
             SecurityContextHolder.getContext().setAuthentication(token);
             response.sendRedirect("http://localhost:3000/home");

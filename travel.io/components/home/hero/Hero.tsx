@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { OAuthUser } from "@/types/userTypes"
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import { faPlane } from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
+import { TypewriterEffectSmooth } from "@/components/ui/typewrite-effect"
 
 interface HeroProps {
 
@@ -14,12 +14,24 @@ interface HeroProps {
 
 export default function Hero({ data }: HeroProps) {
 
+	const words = [
+		{ text: 'Welcome' },
+		{ text: `${data?.name}.` },
+		{ text: 'Build' },
+		{ text: 'a' },
+		{ text: 'better' },
+		{ text: 'plan' },
+		{ text: 'today' }
+	];
 
 	return (
 
 		<section className="flex flex-col items-center w-full justify-center gap-14 md:items-start">
 
-			<h1 className="font-bold text-xl text-wrap md:text-2xl"> 👋 Welcome, <span className="text-blue-500">{data?.name}</span> to Travel.io </h1>
+
+
+			<TypewriterEffectSmooth words={words} />
+
 
 
 			<div className="shadow-2xl rounded-xl flex flex-col-reverse w-full justify-center items-center p-4 text-center md:flex-row md:text-start md:p-6">

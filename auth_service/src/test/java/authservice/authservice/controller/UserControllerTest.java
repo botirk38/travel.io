@@ -34,8 +34,7 @@ public class UserControllerTest {
     @Mock
     private AuthenticationManager authenticationManager;
 
-    @Mock
-    private RememberMeServices rememberMeServices;
+  
 
     @InjectMocks
     private UserController userController;
@@ -50,7 +49,7 @@ public class UserControllerTest {
     @SuppressWarnings("null")
     @Test
     public void registerUser_Success() throws Exception {
-        User user = new User("testUser", "password", "test@example.com");
+        User user = new User("testUser", "password", "test@example.com", "name");
 
         mockMvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +63,7 @@ public class UserControllerTest {
     @SuppressWarnings("null")
     @Test
     public void registerUser_Fail_UsernameExists() throws Exception {
-        User user = new User("testUser", "password", "test@example.com");
+        User user = new User("testUser", "password", "test@example.com", "name");
 
         when(userService.findByUsername(user.getUsername())).thenReturn(new User());
 
@@ -80,7 +79,7 @@ public class UserControllerTest {
     @SuppressWarnings("null")
     @Test
     public void loginUser_Success() throws Exception {
-        User user = new User("testUser", "password", null);
+        User user = new User("testUser", "password", null, "name");
 
         Authentication authentication = mock(Authentication.class);
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(authentication);
@@ -92,7 +91,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.message").value("Login successful"));
 
         verify(authenticationManager, times(1)).authenticate(any(Authentication.class));
-        verify(rememberMeServices, times(1)).loginSuccess(any(), any(), any(Authentication.class));
     }
 
 }

@@ -16,11 +16,16 @@ export const postLogin = async (values: z.infer<typeof formSchema>) => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(values),
 			signal,
+			credentials: 'include'
 		});
 
 		if (!response.ok) {
-			throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+			const error = await response.text();
+			console.error(error);
+			throw new Error(`Server responded with ${response.status}: ${error}`);
 		}
+
+		return await response.json();
 
 	} catch (error) {
 		console.error('Signup error:', error);

@@ -5,17 +5,23 @@ import org.springframework.security.oauth2.core.oidc.AddressStandardClaim;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import authservice.authservice.model.IUser;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class OAuthUser {
-
+@Entity
+public class OAuthUser implements IUser {
+    @Id
     private String id;
     private String name;
     private String email;
     private String imageUrl;
+    @Transient
     private AddressStandardClaim address;
     private String birthdate;
     private String phoneNumber;
@@ -51,6 +57,18 @@ public class OAuthUser {
         }
 
         return appUser;
+    }
+
+    @Override
+    public String getUsername() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
+    }
+
+    @Override
+    public void setUsername(String username) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setUsername'");
     }
 
 }

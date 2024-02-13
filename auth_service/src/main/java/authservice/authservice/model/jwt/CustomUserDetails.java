@@ -1,56 +1,90 @@
 package authservice.authservice.model.jwt;
 
+import java.util.Collection;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-
 public class CustomUserDetails implements UserDetails {
 
-    private User user;
+    private final User user;
+    private final Collection<? extends GrantedAuthority> authorities;
+    
 
-    public CustomUserDetails(User user) {
+    public CustomUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
         this.user = user;
+        this.authorities = authorities;
+        
     }
+
+  
+
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    public String getAddress() {
+        return user.getAddress();
+    }
+
+    public String getPhone() {
+        return user.getPhone();
+    }
+
+    public String getDob() {
+        return user.getBirthdate();
+    }
+
+    public String getName() {
+        return user.getName();
+    }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
+
+
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return user.getPassword();
     }
+
+
 
     @Override
     public String getUsername() {
-        return this.user.getUsername();
+        return user.getUsername();
     }
 
-    public String getEmail() {
-        return this.user.getEmail();
-    }
+
 
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
 
+
+    @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
+
 
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+
+
     @Override
     public boolean isEnabled() {
         return true;
     }
-
 }

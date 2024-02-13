@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleUserIcon, FacebookIcon, GithubIcon } from "lucide-react";
+import { CircleUserIcon, FacebookIcon, Github, GithubIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
@@ -20,10 +20,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { postSignup } from "@/api/signup/signup";
-
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 const formSchema = z.object({
 	username: z.string().min(2).max(50),
+	name: z.string().min(2).max(50),
 	password: z.string().min(2).max(50),
 	email: z.string().email().max(320),
 });
@@ -36,8 +37,9 @@ export default function Home() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			username: "",
+			name: "",
 			password: "",
-			email:"",
+			email: "",
 		},
 	});
 
@@ -68,7 +70,6 @@ export default function Home() {
 				})
 				console.error('Signup error form', error);
 			},
-			// Optional: Do something after mutation is settled (success or failure)
 		});
 
 	}
@@ -107,8 +108,8 @@ export default function Home() {
 
 
 					<Button className="rounded-full gap-2 p-6" onClick={githubSignIn}>
-						<GithubIcon />
 
+						<FontAwesomeIcon icon={faGithub} size="xl" />
 						<p> Signup with Github </p>
 					</Button>
 
@@ -159,6 +160,24 @@ export default function Home() {
 								)}
 							/>
 
+								<FormField
+								control={form.control}
+								name="name"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Full Name</FormLabel>
+										<FormControl>
+											<Input placeholder="shadcn" {...field} />
+										</FormControl>
+										<FormDescription>
+											Tell us your name!
+											
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
 							<FormField
 								control={form.control}
 								name="password"
@@ -166,7 +185,7 @@ export default function Home() {
 									<FormItem>
 										<FormLabel>Password</FormLabel>
 										<FormControl>
-											<Input placeholder="abc1234" {...field} />
+											<Input placeholder="abc1234" type="password" {...field} />
 										</FormControl>
 										<FormDescription>
 											Choose a strong password for your account.

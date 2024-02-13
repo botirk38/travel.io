@@ -2,19 +2,14 @@ package authservice.authservice.service;
 
 import authservice.authservice.model.jwt.User;
 import authservice.authservice.repository.UserRepository;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import java.security.Key;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class UserService {
-    @Autowired
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -33,26 +28,52 @@ public class UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
-    public String loginUser(User user) {
-        User foundUser = userRepository.findByUsername(user.getUsername()).orElse(null);
-        if (foundUser != null && passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
-
-            String jws = Jwts.builder()
-            .setSubject(foundUser.getUsername())
-            .signWith(Keys.secretKeyFor(SignatureAlgorithm.HS256))
-            .compact();
-                    
-            return jws;
-        }
-        return null;
-    }
-
-    public void validateToken(String token, Key secretKey) {
-        Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
-    }
-
+   
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public void updateUser(User currentUser, User updatedUser) {
+        boolean isModified = false;
+    
+        if (!currentUser.getUsername().equals(updatedUser.getUsername())) {
+            currentUser.setUsername(updatedUser.getUsername());
+            isModified = true;
+        }
+    
+        if (!currentUser.getEmail().equals(updatedUser.getEmail())) {
+            currentUser.setEmail(updatedUser.getEmail());
+            isModified = true;
+        }
+    
+        if (!passwordEncoder.matches(updatedUser.getPassword(), currentUser.getPassword())) {
+            currentUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            isModified = true;
+        }
+
+        if(!currentUser.getPhone().equals(updatedUser.getPhone())){
+            currentUser.setPhone(updatedUser.getPhone());
+            isModified = true;
+        }
+
+        if(!currentUser.getAddress().equals(updatedUser.getAddress())){
+            currentUser.setAddress(updatedUser.getAddress());
+            isModified = true;
+        }
+
+        if(!currentUser.getBirthdate().equals(updatedUser.getBirthdate())){
+            currentUser.setBirthdate(updatedUser.getBirthdate());
+            isModified = true;
+        }
+
+        if(!currentUser.getName().equals(updatedUser.getName())){
+            currentUser.setName(updatedUser.getName());
+            isModified = true;
+        }
+    
+        if (isModified) {
+            userRepository.save(currentUser);
+        }
     }
 
     

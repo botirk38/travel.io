@@ -14,6 +14,7 @@ export default async function Page() {
 
 
 	const data: OAuthUser = await getUserInfo();
+	console.log(data);
 
 
 	return (

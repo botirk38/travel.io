@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { postLogin } from "@/api/login/login";
 import { useMutation } from "react-query";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 const formSchema = z.object({
 	username: z.string().min(2).max(50),
@@ -40,6 +41,7 @@ export default function Home() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			username: "",
+			password: "",
 		},
 	});
 
@@ -59,7 +61,10 @@ export default function Home() {
 	}
 
 	// 2. Define a submit handler.
-	function onSubmit(values: z.infer<typeof formSchema>) {
+	function onSubmit(values: z.infer<typeof formSchema>, event: React.BaseSyntheticEvent | undefined) {
+		event?.preventDefault();
+		console.log("Values: ", values);
+
 
 		mutation.mutate(values, {
 			onSuccess: (data) => {
@@ -70,7 +75,7 @@ export default function Home() {
 
 
 				})
-				router.push("/home")
+				router.push("/home");
 			},
 			onError: (error) => {
 				toast({
@@ -79,7 +84,6 @@ export default function Home() {
 				})
 				console.error('Login error form', error);
 			},
-			// Optional: Do something after mutation is settled (success or failure)
 		});
 
 
@@ -104,7 +108,8 @@ export default function Home() {
 					</p>
 
 					<Button className="rounded-full gap-2 p-6" onClick={githubSignIn}>
-						<GithubIcon />
+						<FontAwesomeIcon icon={faGithub} size="xl" />
+
 
 						<p> Log in with Github </p>
 					</Button>

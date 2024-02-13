@@ -2,6 +2,7 @@ package authservice.authservice.model.jwt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import authservice.authservice.model.IUser;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,14 +12,16 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "app_user")
-public class User {
+public class User implements IUser{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column (nullable = false, unique = true)
-    @JsonProperty("name")
     private String username;
+
+    @Column (nullable = false)
+    private String name;
 
     @Column (nullable = false)
     private String password;
@@ -43,10 +46,11 @@ public class User {
 
     }
 
-    public User(String username, String password, String email){
+    public User(String username, String password, String email, String name){
         this.username = username;
         this.password = password;
         this.email = email;
+        this.name = name;
     }
 
     public User(String username, String password, String email, String phone, String address, String birthdate){
@@ -108,6 +112,14 @@ public class User {
 
     public String getBirthdate(){
         return this.birthdate;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
  
