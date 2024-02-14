@@ -20,14 +20,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
+import authservice.authservice.oauth.Oauth2AuthenticationEntrypoint;
+import authservice.authservice.oauth.Oauth2LoginSuccessHandler;
 import authservice.authservice.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-
 
     @Value("${security.rememberMe.key}")
     private String rememberMeKey;
@@ -61,8 +60,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    
-
     @Bean
     SecurityFilterChain filterChainOAuth(HttpSecurity http) throws Exception {
         http
@@ -71,19 +68,28 @@ public class SecurityConfig {
                         .requestMatchers("/users/**", "/oauth/**").permitAll()
                         .anyRequest().authenticated())
 
+                .exceptionHandling(exceptionHandlingConfigurer -> {
+                    exceptionHandlingConfigurer.authenticationEntryPoint(
+                            new Oauth2AuthenticationEntrypoint());
+                })
+
+                .oauth2Login(customizer -> {
+                    customizer
+                            .successHandler(new Oauth2LoginSuccessHandler());
+                })
+
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(
                         sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                .securityContext( securityContext -> securityContext.requireExplicitSave(true));
-               
+                .securityContext(securityContext -> securityContext.requireExplicitSave(true));
 
         return http.build();
     }
 
     @Bean
-    UserDetailsService userDetailsService(){
+    UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
-        
+
     }
 
 }

@@ -2,7 +2,7 @@ package authservice.authservice.service;
 
 import authservice.authservice.model.jwt.User;
 import authservice.authservice.repository.UserRepository;
-
+import jakarta.transaction.Transactional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,8 @@ public class UserService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
-    public void updateUser(User currentUser, User updatedUser) {
+    @Transactional
+    public User updateUser(User currentUser, User updatedUser) {
         boolean isModified = false;
 
         if (currentUser == null || updatedUser == null) {
@@ -78,8 +79,11 @@ public class UserService {
     
         // Save changes if any field was modified
         if (isModified) {
+
             userRepository.save(currentUser);
         }
+
+        return currentUser;
     }
     
 

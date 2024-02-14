@@ -8,7 +8,7 @@ export default async function AuthenticationGuard({ children }: { children: Reac
 
 
   if (!userInfoResponse) {
-    redirect('/')
+     redirect('/')
   }
 
   return (

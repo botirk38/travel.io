@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import authservice.authservice.model.jwt.CustomUserDetails;
 import authservice.authservice.model.jwt.User;
 import authservice.authservice.model.oauth.OAuthUser;
 import authservice.authservice.service.OAuthUserService;
@@ -56,20 +56,14 @@ public class UserController {
             OAuthUser user = (OAuthUser) principal;
             return ResponseEntity.ok(user);
 
-        } else if (principal instanceof UserDetails) {
+        } else if (principal instanceof CustomUserDetails) {
+            String username = ((CustomUserDetails) principal).getUsername();
+            User userEntity = userService.findByUsername(username);
+            if (userEntity == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
 
-            UserDetails userDetails = (UserDetails) principal;
-
-            return ResponseEntity.ok(userDetails);
-
-        } else if (principal instanceof User) {
-            User user = (User) principal;
-            return ResponseEntity.ok(user);
-        } else if (principal instanceof AnonymousAuthenticationToken) {
-
-            User user = (User) principal;
-
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(userEntity);
         }
 
         else {
@@ -100,7 +94,8 @@ public class UserController {
     }
 
     @PostMapping("/update-profile/{id}")
-    public ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody User updatedUser,
+            HttpServletResponse response) {
         // Fetch the authenticated user's username
         String authenticatedUsername = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -123,8 +118,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You're not authorized to update this profile");
         }
 
-        if (updatedUser.getUsername() == null || updatedUser.getEmail() == null || updatedUser.getPhone() == null) {
-            return ResponseEntity.badRequest().body("Username and email are required");
+        if (updatedUser.getUsername() == null || updatedUser.getUsername().isEmpty() ||
+                updatedUser.getEmail() == null || updatedUser.getEmail().isEmpty() ||
+                updatedUser.getPhone() == null || updatedUser.getPhone().isEmpty()) {
+            return ResponseEntity.badRequest().body("Username, email, and phone are required");
         }
 
         userService.updateUser(currentUser, updatedUser);
@@ -163,6 +160,7 @@ public class UserController {
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(user.getUsername(),
                 user.getPassword());
         Authentication authenticationResult = this.authenticationManager.authenticate(authenticationRequest);
+        logger.debug("User Password Login: {}", user.getPassword());
 
         if (authenticationResult == null) {
             return ResponseEntity.badRequest().body("Login failed.");

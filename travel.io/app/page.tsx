@@ -152,7 +152,7 @@ export default function Home() {
 									<FormItem>
 										<FormLabel>Password</FormLabel>
 										<FormControl>
-											<Input placeholder="abc1234" {...field} />
+											<Input placeholder="abc1234" {...field} type="password" />
 										</FormControl>
 										<FormDescription>
 											This is your password for your account.

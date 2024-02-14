@@ -64,7 +64,6 @@ export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
     email: data?.email,
     phone: data?.phone,
     address: data?.address,
-    password: data?.password, 
 
   }
 
@@ -139,7 +138,7 @@ export function ProfileForm({ data }: { data: SpringUser | OAuthUser }) {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="password" {...field}  value={""}/>
+                <Input placeholder="password" {...field} type="password" />
               </FormControl>
               <FormDescription>
                 This is your password, keep it secret.              
