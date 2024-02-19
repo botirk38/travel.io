@@ -74,6 +74,7 @@ def find_destination():
     Destination name (name)
     A brief description (description)
     A list of things the traveler likes about this destination (likes)
+    A plan for each day that the traveler will spend at this destination (plan)
     Local wonders with their names (localWonders)
     Additionally, include an array of routes for each destination, with each route detailing (routes):
     The name of the next destination (routeName)
