@@ -1,6 +1,5 @@
 package authservice.authservice.model.jwt;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import authservice.authservice.model.IUser;
 import jakarta.persistence.Column;
