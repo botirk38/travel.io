@@ -45,6 +45,14 @@ public class DayPlan {
         return destination;
     }
 
+    public void setDestination(Destination destination) {
+        this.destination = destination;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public boolean equals(Object o) {
         if (this == o) {
             return true;
