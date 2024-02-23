@@ -101,4 +101,9 @@ public class Activity {
                 '}';
     }
 
+    public void setId(Long id) {
+        this.id = id;
+
+    }
+
 }
