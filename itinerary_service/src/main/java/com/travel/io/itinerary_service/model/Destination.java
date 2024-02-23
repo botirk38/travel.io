@@ -88,6 +88,10 @@ public class Destination {
         return endDate;
     }
 
+    public Itinerary getItinerary() {
+        return itinerary;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -120,9 +124,8 @@ public class Destination {
         this.endDate = endDate;
     }
 
-    public Itinerary getItinerary() {
-        return itinerary;
-
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public boolean equals(Object o) {
@@ -154,5 +157,6 @@ public class Destination {
                 ", hotels=" + hotels +
                 '}';
     }
+
 
 }
