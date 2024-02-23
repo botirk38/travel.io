@@ -72,14 +72,27 @@ def find_destination():
     Please create a detailed travel plan based on the above questions and answers. Each travel plan consists of:
     A list of destinations, where each destination includes:
     Destination name (name)
-    A brief description (description)
-    A list of things the traveler likes about this destination (likes)
-    A plan for each day that the traveler will spend at this destination (plan)
-    Local wonders with their names (localWonders)
-    Additionally, include an array of routes for each destination, with each route detailing (routes):
-    The name of the next destination (routeName)
-    Instructions on what to do at the current destination to get to the next one (instructions)
 
+    A brief description (description)
+
+    A list of things the traveler likes about this destination (likes)
+
+    A plan for each day that the traveler will spend at this destination (plan) where each day will include:
+        A list of activities for the day (activities)
+        A activity will include:
+        A name of the activity (activityName)
+        A start time (startTime)
+        An end time (endTime)
+        A brief description of the activity (description)
+
+
+
+    The name of the activity (activityName)
+
+    A list of Local wonders with their names (localWonders)
+
+    A list of hotels with their names (hotels)
+    
     The key for all the values should be structured exactly as I inputted e.g. Instructions -> instructions, Description > description
     """
 
