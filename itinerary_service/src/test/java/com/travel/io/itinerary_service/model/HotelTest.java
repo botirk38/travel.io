@@ -11,7 +11,8 @@ class HotelTest {
 
     @BeforeEach
     void setUp() {
-        hotel = new Hotel(1L, "Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890", "test@test.com", "www.test.com");
+        hotel = new Hotel("Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890",
+                "test@test.com", "www.test.com", "Test Image URL");
     }
 
     @Test
@@ -27,31 +28,6 @@ class HotelTest {
     @Test
     void testGetPrice() {
         assertEquals("100", hotel.getPrice());
-    }
-
-    @Test
-    void testGetLikes() {
-        assertEquals("50", hotel.getLikes());
-    }
-
-    @Test
-    void testGetAddress() {
-        assertEquals("Test Address", hotel.getAddress());
-    }
-
-    @Test
-    void testGetPhone() {
-        assertEquals("1234567890", hotel.getPhone());
-    }
-
-    @Test
-    void testGetEmail() {
-        assertEquals("test@test.com", hotel.getEmail());
-    }
-
-    @Test
-    void testGetWebsite() {
-        assertEquals("www.test.com", hotel.getWebsite());
     }
 
     @Test
@@ -73,44 +49,16 @@ class HotelTest {
     }
 
     @Test
-    void testSetLikes() {
-        hotel.setLikes("100");
-        assertEquals("100", hotel.getLikes());
-    }
-
-    @Test
-    void testSetAddress() {
-        hotel.setAddress("New Test Address");
-        assertEquals("New Test Address", hotel.getAddress());
-    }
-
-    @Test
-    void testSetPhone() {
-        hotel.setPhone("0987654321");
-        assertEquals("0987654321", hotel.getPhone());
-    }
-
-    @Test
-    void testSetEmail() {
-        hotel.setEmail("newtest@test.com");
-        assertEquals("newtest@test.com", hotel.getEmail());
-    }
-
-    @Test
-    void testSetWebsite() {
-        hotel.setWebsite("www.newtest.com");
-        assertEquals("www.newtest.com", hotel.getWebsite());
-    }
-
-    @Test
     void testEquals() {
-        Hotel hotel2 = new Hotel(1L, "Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890", "test@test.com", "www.test.com");
+        Hotel hotel2 = new Hotel("Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890",
+                "test@test.com", "www.test.com", "Test Image URL");
         assertEquals(hotel.hashCode(), hotel2.hashCode());
     }
 
     @Test
     void testHashCode() {
-        Hotel hotel2 = new Hotel(1L, "Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890", "test@test.com", "www.test.com");
+        Hotel hotel2 = new Hotel("Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890",
+                "test@test.com", "www.test.com", "Test Image URL");
         assertEquals(hotel.hashCode(), hotel2.hashCode());
     }
 

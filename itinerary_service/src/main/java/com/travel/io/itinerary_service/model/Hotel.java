@@ -16,11 +16,8 @@ public class Hotel {
     private String name;
     private String description;
     private String price;
-    private String likes;
-    private String address;
-    private String phone;
-    private String email;
-    private String website;
+    private String imageUrl;
+    private String rating;
 
     @ManyToOne
     private Destination destination;
@@ -28,18 +25,13 @@ public class Hotel {
     public Hotel() {
     }
 
-    public Hotel(Long id, String name, String description, String price, String likes, String address, String phone,
+    public Hotel(String name, String description, String price, String likes, String address, String phone,
             String email,
-            String website) {
-        this.id = id;
+            String website, String imageUrl) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.likes = likes;
-        this.address = address;
-        this.phone = phone;
-        this.email = email;
-        this.website = website;
+        this.imageUrl = imageUrl;
 
     }
 
@@ -55,28 +47,17 @@ public class Hotel {
         return price;
     }
 
-    public String getLikes() {
-        return likes;
+    public String getRating() {
+        return rating;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
+    
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public void setDescription(String description) {
@@ -87,26 +68,7 @@ public class Hotel {
         this.price = price;
     }
 
-    public void setLikes(String likes) {
-        this.likes = likes;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
+    
     public Destination getDestination() {
         return destination;
     }
@@ -115,10 +77,17 @@ public class Hotel {
         this.destination = destination;
     }
 
-    
     public Long getId() {
         return id;
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }   
 
     public boolean equals(Object o) {
         if (this == o) {
@@ -142,11 +111,7 @@ public class Hotel {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price='" + price + '\'' +
-                ", likes='" + likes + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", website='" + website + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 

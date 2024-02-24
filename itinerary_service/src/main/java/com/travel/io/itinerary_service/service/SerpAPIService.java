@@ -9,8 +9,12 @@ import com.travel.io.itinerary_service.model.Hotel;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 @Service
@@ -45,7 +49,15 @@ public class SerpAPIService {
 
     }
 
-    public Hotel fetchHotelDetails(String query, String checkInDate, String checkoutDate) {
+    private JsonObject getFirstJsonObject(JsonArray jsonArray) {
+        return jsonArray.size() > 0 ? jsonArray.get(0).getAsJsonObject() : null;
+    }
+
+    private String getStringProperty(JsonObject jsonObject, String property) {
+        return jsonObject.has(property) ? jsonObject.get(property).getAsString() : null;
+    }
+
+    public List<Hotel> fetchHotelDetails(String query, String checkInDate, String checkoutDate) {
 
         Map<String, String> params = new HashMap<>();
         params.put("q", query);
@@ -54,43 +66,46 @@ public class SerpAPIService {
         params.put("check_in", checkInDate);
         params.put("check_out", checkoutDate);
 
-        Hotel hotel = new Hotel();
-
         GoogleSearch googleSearch = new GoogleSearch(params);
+        List<Hotel> hotels = new ArrayList<>();
 
         try {
             JsonObject results = googleSearch.getJson();
 
-            if (results.has("properties")) {
-                JsonArray properties = results.getAsJsonArray("properties");
+            Optional.ofNullable(results.getAsJsonArray("properties"))
+                    .ifPresent(properties -> {
+                        for (JsonElement propertyElement : properties) {
+                            Hotel hotel = new Hotel();
 
-                if (properties.size() > 0) {
-                    JsonObject firstHotel = properties.get(0).getAsJsonObject();
+                            JsonObject property = propertyElement.getAsJsonObject();
 
-                    if (firstHotel.has("name")) {
-                        String name = firstHotel.get("name").getAsString();
-                        String description = firstHotel.get("description").getAsString();
-                        hotel.setName(name);
-                        hotel.setDescription(description);
+                            Optional.ofNullable(getStringProperty(property, "name"))
+                                    .ifPresent(hotel::setName);
+                            Optional.ofNullable(getStringProperty(property, "description"))
+                                    .ifPresent(hotel::setDescription);
 
-                        if (firstHotel.has("prices")) {
-                            JsonArray prices = firstHotel.getAsJsonArray("prices");
-                            JsonObject firstPrice = prices.get(0).getAsJsonObject();
+                            Optional.ofNullable(property.getAsJsonArray("prices"))
+                                    .map(this::getFirstJsonObject)
+                                    .filter(firstPrice -> firstPrice.has("rate_per_night"))
+                                    .map(firstPrice -> firstPrice.getAsJsonObject("rate_per_night"))
+                                    .map(ratePerNight -> getStringProperty(ratePerNight, "lowest"))
+                                    .ifPresent(hotel::setPrice);
 
-                            if (firstPrice.has("rate_per_night")) {
-                                JsonObject ratePerNight = firstPrice.getAsJsonObject("rate_per_night");
-                                String lowestPrice = ratePerNight.get("lowest").getAsString();
-                                hotel.setPrice(lowestPrice);
+                            Optional.ofNullable(property.getAsJsonArray("images"))
+                                    .map(this::getFirstJsonObject)
+                                    .map(firstImage -> getStringProperty(firstImage, "url"))
+                                    .ifPresent(hotel::setImageUrl);
 
-                            }
+                            Optional.ofNullable(getStringProperty(property, "overall_rating"))
+                                    .ifPresent(hotel::setRating);
+
                         }
+                    });
 
-                    }
-                }
-            }
-        } catch (SerpApiSearchException exception) {
-            System.out.println(exception);
+        } catch (SerpApiSearchException e) {
+            // handle exception
         }
 
+        return hotels;
     }
 }
