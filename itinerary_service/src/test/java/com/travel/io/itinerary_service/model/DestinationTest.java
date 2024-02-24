@@ -1,7 +1,5 @@
 package com.travel.io.itinerary_service.model;
 
-
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +19,8 @@ class DestinationTest {
         List<LocalWonder> localWonders = Arrays.asList(new LocalWonder(), new LocalWonder());
         List<Hotel> hotels = Arrays.asList(new Hotel(), new Hotel());
 
-        destination = new Destination("Test Destination", "This is a test destination", "1000", dayPlans, localWonders, hotels, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 10));
+        destination = new Destination("Test Destination", "This is a test destination", "1000", dayPlans, localWonders,
+                hotels, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 10));
         destination.setId(1L);
     }
 
@@ -85,21 +84,23 @@ class DestinationTest {
 
     @Test
     void testEquals() {
-        Destination destination2 = new Destination("Test Destination", "This is a test destination", "1000", null, null, null, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 10));
+        Destination destination2 = new Destination("Test Destination", "This is a test destination", "1000", null, null,
+                null, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 10));
         destination2.setId(1L);
         assertEquals(destination, destination2);
     }
 
     @Test
     void testHashCode() {
-        Destination destination2 = new Destination("Test Destination", "This is a test destination", "1000", null, null, null, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 10));
+        Destination destination2 = new Destination("Test Destination", "This is a test destination", "1000", null, null,
+                null, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 10));
         destination2.setId(1L);
         assertEquals(destination.hashCode(), destination2.hashCode());
     }
 
     @Test
     void testToString() {
-        String expected = "Destination{id=1, name='Test Destination', description='This is a test destination', likes='1000', startDate=2022-01-01, endDate=2022-01-10, dayPlans=[DayPlan{id=null, activities=null}, DayPlan{id=null, activities=null}], localWonders=[LocalWonder [destination=null, id=null, imageUrl=null, name=null], LocalWonder [destination=null, id=null, imageUrl=null, name=null]], hotels=[Hotel{id=null, name='null', description='null', price='null', likes='null', address='null', phone='null', email='null', website='null'}, Hotel{id=null, name='null', description='null', price='null', likes='null', address='null', phone='null', email='null', website='null'}]}";
+        String expected = "Destination{id=1, name='Test Destination', description='This is a test destination', likes='1000', startDate=2022-01-01, endDate=2022-01-10, dayPlans=[DayPlan{id=null, activities=null}, DayPlan{id=null, activities=null}], localWonders=[LocalWonder [destination=null, id=null, imageUrl=null, name=null], LocalWonder [destination=null, id=null, imageUrl=null, name=null]], hotels=[Hotel{id=null, name='null', description='null', price='null', imageUrl='null'}, Hotel{id=null, name='null', description='null', price='null', imageUrl='null'}]}";
         assertEquals(expected, destination.toString());
     }
 }

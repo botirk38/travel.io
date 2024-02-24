@@ -17,7 +17,7 @@ public class Hotel {
     private String description;
     private String price;
     private String imageUrl;
-    private String rating;
+    private Double rating;
 
     @ManyToOne
     private Destination destination;
@@ -25,13 +25,12 @@ public class Hotel {
     public Hotel() {
     }
 
-    public Hotel(String name, String description, String price, String likes, String address, String phone,
-            String email,
-            String website, String imageUrl) {
+    public Hotel(String name, String description, String price, String imageUrl, Double rating) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.rating = rating;
 
     }
 
@@ -47,16 +46,15 @@ public class Hotel {
         return price;
     }
 
-    public String getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
@@ -68,7 +66,6 @@ public class Hotel {
         this.price = price;
     }
 
-    
     public Destination getDestination() {
         return destination;
     }
@@ -81,13 +78,17 @@ public class Hotel {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }   
+    }
 
     public boolean equals(Object o) {
         if (this == o) {
@@ -99,7 +100,6 @@ public class Hotel {
         Hotel hotel = (Hotel) o;
         return id.equals(hotel.id);
     }
-
 
     public int hashCode() {
         return id.hashCode();

@@ -11,13 +11,13 @@ class HotelTest {
 
     @BeforeEach
     void setUp() {
-        hotel = new Hotel("Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890",
-                "test@test.com", "www.test.com", "Test Image URL");
+        hotel = new Hotel("test hotel", "This is a test hotel", "100", "testImageUrl", 5.0);
+        hotel.setId(1L);
     }
 
     @Test
     void testGetName() {
-        assertEquals("Test Hotel", hotel.getName());
+        assertEquals("test hotel", hotel.getName());
     }
 
     @Test
@@ -29,6 +29,8 @@ class HotelTest {
     void testGetPrice() {
         assertEquals("100", hotel.getPrice());
     }
+
+   
 
     @Test
     void testSetName() {
@@ -48,23 +50,24 @@ class HotelTest {
         assertEquals("200", hotel.getPrice());
     }
 
+    
     @Test
     void testEquals() {
-        Hotel hotel2 = new Hotel("Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890",
-                "test@test.com", "www.test.com", "Test Image URL");
+        Hotel hotel2 = new Hotel("test hotel", "This is a test hotel", "100", "testImageUrl", 5.0);
+        hotel2.setId(1L);
         assertEquals(hotel.hashCode(), hotel2.hashCode());
     }
 
     @Test
     void testHashCode() {
-        Hotel hotel2 = new Hotel("Test Hotel", "This is a test hotel", "100", "50", "Test Address", "1234567890",
-                "test@test.com", "www.test.com", "Test Image URL");
+        Hotel hotel2 = new Hotel("test hotel", "This is a test hotel", "100", "testImageUrl", 5.0);
+        hotel2.setId(1L);
         assertEquals(hotel.hashCode(), hotel2.hashCode());
     }
 
     @Test
     void testToString() {
-        String expected = "Hotel{id=1, name='Test Hotel', description='This is a test hotel', price='100', likes='50', address='Test Address', phone='1234567890', email='test@test.com', website='www.test.com'}";
+        String expected = "Hotel{id=1, name='test hotel', description='This is a test hotel', price='100', imageUrl='testImageUrl'}";
         assertEquals(expected, hotel.toString());
     }
 }

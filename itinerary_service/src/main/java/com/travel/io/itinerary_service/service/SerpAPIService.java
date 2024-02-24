@@ -1,5 +1,6 @@
 package com.travel.io.itinerary_service.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ public class SerpAPIService {
     @Value("${serp.api.key}")
     private String apiKey;
 
+    @Autowired
+    GoogleSearch googleSearch;
+
     public String fetchLocalWonderImage(String query) {
 
         Map<String, String> params = new HashMap<>();
@@ -31,8 +35,6 @@ public class SerpAPIService {
         params.put("api_key", apiKey);
 
         String imageUrl = "";
-
-        GoogleSearch googleSearch = new GoogleSearch(params);
 
         try {
             JsonObject response = googleSearch.getJson();
@@ -66,7 +68,6 @@ public class SerpAPIService {
         params.put("check_in", checkInDate);
         params.put("check_out", checkoutDate);
 
-        GoogleSearch googleSearch = new GoogleSearch(params);
         List<Hotel> hotels = new ArrayList<>();
 
         try {
@@ -96,14 +97,18 @@ public class SerpAPIService {
                                     .map(firstImage -> getStringProperty(firstImage, "url"))
                                     .ifPresent(hotel::setImageUrl);
 
-                            Optional.ofNullable(getStringProperty(property, "overall_rating"))
+                            Optional.ofNullable(property.get("overall_rating"))
+                                    .filter(JsonElement::isJsonPrimitive)
+                                    .map(JsonElement::getAsDouble)
                                     .ifPresent(hotel::setRating);
+
+                            hotels.add(hotel);
 
                         }
                     });
 
         } catch (SerpApiSearchException e) {
-            // handle exception
+            throw new RuntimeException(e); 
         }
 
         return hotels;
