@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-
 @Entity
 public class LocalWonder {
     @Id
@@ -41,8 +40,8 @@ public class LocalWonder {
         this.name = name;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrl(String image) {
+        this.imageUrl = image;
     }
 
     public void setId(Long id) {

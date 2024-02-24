@@ -3,7 +3,7 @@ import java.util.List;
 
 public class TravelPlanDto {
     
-    public static class Activity {
+    public static class ActivityDto {
         private String activityName;
         private String description;
         private String startTime;
@@ -46,25 +46,27 @@ public class TravelPlanDto {
 
     }
 
-    public static class Plan {
-        private List<Activity> activities;
+    public static class PlanDto {
+        private List<ActivityDto> activities;
 
-        public List<Activity> getActivities() {
+        public List<ActivityDto> getActivities() {
             return activities;
         }
 
-        public void setActivities(List<Activity> activities) {
+        public void setActivities(List<ActivityDto> activities) {
             this.activities = activities;
         }
     }
 
-    public static class Destination {
+    public static class DestinationDto {
         private String name;
         private String description;
         private List<String> likes;
-        private Plan plan;
+        private List<PlanDto> plan;
         private List<String> hotels;
         private List<String> localWonders;
+        private String startDate;
+        private String endDate;
 
         public String getName() {
             return name;
@@ -90,11 +92,11 @@ public class TravelPlanDto {
             this.likes = likes;
         }
 
-        public Plan getPlan() {
+        public List<PlanDto> getPlan() {
             return plan;
         }
 
-        public void setPlan(Plan plan) {
+        public void setPlan(List<PlanDto> plan) {
             this.plan = plan;
         }
 
@@ -114,18 +116,45 @@ public class TravelPlanDto {
         public void setLocalWonders(List<String> localWonders) {
             this.localWonders = localWonders;
         }
+
+        public String getStartDate() {
+            return startDate;
+        }
+
+        public void setStartDate(String startDate) {
+            this.startDate = startDate;
+        }
+
+        public String getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
+        }
         
     }
 
-    private List<Destination> destinations;
+    private List<DestinationDto> destinations;
+    private String name;
 
-    public List<Destination> getDestinations() {
+
+    public List<DestinationDto> getDestinations() {
         return destinations;
     }
 
-    public void setDestinations(List<Destination> destinations) {
+    public void setDestinations(List<DestinationDto> destinations) {
         this.destinations = destinations;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
 
 }
