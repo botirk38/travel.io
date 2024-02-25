@@ -124,6 +124,12 @@ public class Destination {
         this.endDate = endDate;
     }
 
+    public void setItinerary(Itinerary itinerary) {
+        this.itinerary = itinerary;
+    }
+
+    
+
     public void setId(Long id) {
         this.id = id;
     }

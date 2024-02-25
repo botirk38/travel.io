@@ -11,8 +11,6 @@ import com.travel.io.itinerary_service.model.Hotel;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.List;
-import java.util.ArrayList;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -59,7 +57,7 @@ public class SerpAPIService {
         return jsonObject.has(property) ? jsonObject.get(property).getAsString() : null;
     }
 
-    public List<Hotel> fetchHotelDetails(String query, String checkInDate, String checkoutDate) {
+    public Hotel fetchHotelDetails(String query, String checkInDate, String checkoutDate) {
 
         Map<String, String> params = new HashMap<>();
         params.put("q", query);
@@ -68,7 +66,9 @@ public class SerpAPIService {
         params.put("check_in", checkInDate);
         params.put("check_out", checkoutDate);
 
-        List<Hotel> hotels = new ArrayList<>();
+        Hotel hotel = new Hotel();
+
+        
 
         try {
             JsonObject results = googleSearch.getJson();
@@ -76,7 +76,6 @@ public class SerpAPIService {
             Optional.ofNullable(results.getAsJsonArray("properties"))
                     .ifPresent(properties -> {
                         for (JsonElement propertyElement : properties) {
-                            Hotel hotel = new Hotel();
 
                             JsonObject property = propertyElement.getAsJsonObject();
 
@@ -102,15 +101,15 @@ public class SerpAPIService {
                                     .map(JsonElement::getAsDouble)
                                     .ifPresent(hotel::setRating);
 
-                            hotels.add(hotel);
 
                         }
                     });
+
 
         } catch (SerpApiSearchException e) {
             throw new RuntimeException(e); 
         }
 
-        return hotels;
+        return hotel;
     }
 }

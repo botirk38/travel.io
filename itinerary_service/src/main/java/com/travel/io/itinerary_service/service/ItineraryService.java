@@ -1,6 +1,6 @@
 package com.travel.io.itinerary_service.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.travel.io.itinerary_service.dto.TravelPlanDto;
@@ -17,71 +17,138 @@ import com.travel.io.itinerary_service.repository.ItineraryRepository;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalTime;
+import java.time.LocalDate;
+
 @Service
 public class ItineraryService {
 
+    private final ItineraryRepository itineraryRepository;
 
-    @Autowired
-    private ItineraryRepository itineraryRepository;
+    private final SerpAPIService googleImagesAPIService;
 
-    @Autowired
-    private SerpAPIService googleImagesAPIService;
+    public ItineraryService(ItineraryRepository itineraryRepository, SerpAPIService googleImagesAPIService) {
+        this.itineraryRepository = itineraryRepository;
+        this.googleImagesAPIService = googleImagesAPIService;
+    }
 
-
-    public Itinerary createItinerary(TravelPlanDto travelPlanDto){
-
+    public Itinerary createItinerary(TravelPlanDto travelPlanDto) {
         Itinerary itinerary = new Itinerary();
-        itinerary.setName(travelPlanDto.getName());
 
-        for(DestinationDto dtoDestination : travelPlanDto.getDestinations()){
-            Destination itineraryDestination = new Destination();
-            itineraryDestination.setName(dtoDestination.getName());
-            itineraryDestination.setDescription(dtoDestination.getDescription());
-            
-            List<DayPlan> dayPlans = new ArrayList<>();
-            List<LocalWonder> localWonders = new ArrayList<>();
+        try {
 
-            for(PlanDto dtoPlan : dtoDestination.getPlan()){
-                DayPlan dayPlan = new DayPlan();
-                List<Activity> activities = new ArrayList<>();
+            itinerary.setName(travelPlanDto.getName());
 
-                for(ActivityDto dtoActivity : dtoPlan.getActivities()){
-                    Activity activity = new Activity();
-                    activity.setName(dtoActivity.getActivityName());
-                    activity.setDescription(dtoActivity.getDescription());
-                    activity.setStartTime(LocalTime.parse(dtoActivity.getStartTime()));
-                    activity.setEndTime(LocalTime.parse(dtoActivity.getEndTime()));
-                    activities.add(activity);
-                }
+            for (DestinationDto dtoDestination : travelPlanDto.getDestinations()) {
+                Destination destination = createDestination(dtoDestination);
+                destination.setItinerary(itinerary);
+                itinerary.getDestinations().add(destination);
 
-
-                dayPlan.setActivities(activities);
-                dayPlans.add(dayPlan);
             }
 
-            for(String localWonder : dtoDestination.getLocalWonders()){
-                LocalWonder wonder = new LocalWonder();
-                wonder.setName(localWonder);
-                String image= googleImagesAPIService.fetchLocalWonderImage(localWonder);
-                wonder.setImageUrl(image);
-                localWonders.add(wonder);
-            }
-
-            for(String hotel: dtoDestination.getHotels()){
-                Hotel hotelItinerary = new Hotel();
-                hotelItinerary.setName(hotel);
-                googleImagesAPIService.fetchHotelDetails(hotel, dtoDestination.getStartDate(), dtoDestination.getEndDate());
-            }
-
-            itinerary.getDestinations().add(itineraryDestination);
-
+        } catch (Exception e) {
+            throw new DataAccessException("Error while creating itinerary", e) {
+            };
         }
 
         return itineraryRepository.save(itinerary);
 
     }
-    
 
+    private Destination createDestination(DestinationDto dtoDestination) {
+        Destination destination = new Destination();
 
-    
+        try {
+
+            destination.setName(dtoDestination.getName());
+            destination.setDescription(dtoDestination.getDescription());
+            destination.setStartDate(LocalDate.parse(dtoDestination.getStartDate()));
+            destination.setEndDate(LocalDate.parse(dtoDestination.getEndDate()));
+            destination.setDayPlans(createDayPlans(dtoDestination.getPlan()));
+            destination.setLocalWonders(fetchLocalWonders(dtoDestination.getLocalWonders()));
+            destination.setHotels(
+                    fetchHotels(dtoDestination.getHotels(), dtoDestination.getStartDate(),
+                            dtoDestination.getEndDate()));
+        } catch (Exception e) {
+            throw new DataAccessException("Error while creating destination", e) {
+            };
+        }
+        return destination;
+    }
+
+    private List<Hotel> fetchHotels(List<String> hotels, String startDate, String endDate) {
+
+        List<Hotel> hotelList = new ArrayList<>();
+
+        try {
+            for (String hotel : hotels) {
+                Hotel hotelObj = googleImagesAPIService.fetchHotelDetails(hotel, startDate, endDate);
+                hotelList.add(hotelObj);
+            }
+
+        } catch (Exception e) {
+            throw new DataAccessException("Error while fetching hotels", e) {
+            };
+        }
+
+        return hotelList;
+    }
+
+    private List<LocalWonder> fetchLocalWonders(List<String> localWonders) {
+        List<LocalWonder> localWonderList = new ArrayList<>();
+
+        try {
+            for (String localWonder : localWonders) {
+                LocalWonder wonder = new LocalWonder();
+                wonder.setName(localWonder);
+                String image = googleImagesAPIService.fetchLocalWonderImage(localWonder);
+                wonder.setImageUrl(image);
+                localWonderList.add(wonder);
+            }
+        } catch (Exception e) {
+
+            throw new DataAccessException("Error while fetching local wonders", e) {
+            };
+        }
+        return localWonderList;
+    }
+
+    private List<DayPlan> createDayPlans(List<PlanDto> plan) {
+        List<DayPlan> dayPlans = new ArrayList<>();
+
+        try {
+            for (PlanDto dtoPlan : plan) {
+                DayPlan dayPlan = new DayPlan();
+                dayPlan.setActivities(createActivities(dtoPlan.getActivities()));
+                dayPlans.add(dayPlan);
+            }
+        } catch (Exception e) {
+
+            throw new DataAccessException("Error while creating day plans", e) {
+            };
+
+        }
+        return dayPlans;
+
+    }
+
+    private List<Activity> createActivities(List<ActivityDto> activities) {
+        List<Activity> activityList = new ArrayList<>();
+
+        try {
+            for (ActivityDto dtoActivity : activities) {
+                Activity activity = new Activity();
+                activity.setName(dtoActivity.getActivityName());
+                activity.setDescription(dtoActivity.getDescription());
+                activity.setStartTime(LocalTime.parse(dtoActivity.getStartTime()));
+                activity.setEndTime(LocalTime.parse(dtoActivity.getEndTime()));
+                activityList.add(activity);
+            }
+        } catch (Exception e) {
+
+            throw new DataAccessException("Error while creating activities", e) {
+            };
+
+        }
+        return activityList;
+    }
 }
