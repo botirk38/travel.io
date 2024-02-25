@@ -54,7 +54,7 @@ public class ItineraryService {
 
     }
 
-    private Destination createDestination(DestinationDto dtoDestination) {
+    Destination createDestination(DestinationDto dtoDestination) {
         Destination destination = new Destination();
 
         try {
@@ -75,7 +75,7 @@ public class ItineraryService {
         return destination;
     }
 
-    private List<Hotel> fetchHotels(List<String> hotels, String startDate, String endDate) {
+    List<Hotel> fetchHotels(List<String> hotels, String startDate, String endDate) {
 
         List<Hotel> hotelList = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public class ItineraryService {
         return hotelList;
     }
 
-    private List<LocalWonder> fetchLocalWonders(List<String> localWonders) {
+    List<LocalWonder> fetchLocalWonders(List<String> localWonders) {
         List<LocalWonder> localWonderList = new ArrayList<>();
 
         try {
@@ -112,7 +112,7 @@ public class ItineraryService {
         return localWonderList;
     }
 
-    private List<DayPlan> createDayPlans(List<PlanDto> plan) {
+    List<DayPlan> createDayPlans(List<PlanDto> plan) {
         List<DayPlan> dayPlans = new ArrayList<>();
 
         try {
@@ -131,7 +131,7 @@ public class ItineraryService {
 
     }
 
-    private List<Activity> createActivities(List<ActivityDto> activities) {
+    List<Activity> createActivities(List<ActivityDto> activities) {
         List<Activity> activityList = new ArrayList<>();
 
         try {

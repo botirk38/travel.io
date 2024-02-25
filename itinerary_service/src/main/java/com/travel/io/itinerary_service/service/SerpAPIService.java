@@ -57,7 +57,11 @@ public class SerpAPIService {
         return jsonObject.has(property) ? jsonObject.get(property).getAsString() : null;
     }
 
-    public Hotel fetchHotelDetails(String query, String checkInDate, String checkoutDate) {
+    public Hotel fetchHotelDetails(String query, String checkInDate, String checkoutDate) throws Exception {
+
+        if(query == null || checkInDate == null || checkoutDate == null) {
+            return null;
+        }
 
         Map<String, String> params = new HashMap<>();
         params.put("q", query);
@@ -72,6 +76,11 @@ public class SerpAPIService {
 
         try {
             JsonObject results = googleSearch.getJson();
+
+            JsonArray properties_check = results.getAsJsonArray("properties");
+            if (properties_check== null || properties_check.size() == 0) {
+                throw new Exception("No properties found");
+            }
 
             Optional.ofNullable(results.getAsJsonArray("properties"))
                     .ifPresent(properties -> {

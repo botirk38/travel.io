@@ -26,7 +26,7 @@ public class SerpAPIServiceTest {
     private SerpAPIService serpAPIService;
 
     @Test
-    void testFetchHotelDetails() {
+    void testFetchHotelDetails() throws Exception {
         // Arrange
         String query = "test";
         String checkInDate = "2022-01-01";
@@ -53,7 +53,7 @@ public class SerpAPIServiceTest {
     }
 
     @Test
-    void testFetchHotelDetailsNoProperties() {
+    void testFetchHotelDetailsNoProperties() throws Exception {
         // Arrange
         String query = "test";
         String checkInDate = "2022-01-01";
@@ -64,11 +64,10 @@ public class SerpAPIServiceTest {
         when(googleSearch.getJson()).thenReturn(mockResults);
 
         // Act
-        Hotel hotel = serpAPIService.fetchHotelDetails(query, checkInDate, checkoutDate);
 
         // Assert
 
-        assertNull(hotel);
+        assertThrows(Exception.class, () -> serpAPIService.fetchHotelDetails(query, checkInDate, checkoutDate));
 
 
     }
