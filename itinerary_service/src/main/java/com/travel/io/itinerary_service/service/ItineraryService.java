@@ -113,6 +113,11 @@ public class ItineraryService {
     }
 
     List<DayPlan> createDayPlans(List<PlanDto> plan) {
+
+        if(plan == null) {
+            return new ArrayList<>();
+        }
+      
         List<DayPlan> dayPlans = new ArrayList<>();
 
         try {
@@ -122,6 +127,7 @@ public class ItineraryService {
                 dayPlans.add(dayPlan);
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
             throw new DataAccessException("Error while creating day plans", e) {
             };
@@ -132,10 +138,17 @@ public class ItineraryService {
     }
 
     List<Activity> createActivities(List<ActivityDto> activities) {
+
+        if(activities == null) {
+            return new ArrayList<>();
+        }
+
+
         List<Activity> activityList = new ArrayList<>();
 
         try {
             for (ActivityDto dtoActivity : activities) {
+
                 Activity activity = new Activity();
                 activity.setName(dtoActivity.getActivityName());
                 activity.setDescription(dtoActivity.getDescription());

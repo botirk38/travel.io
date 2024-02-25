@@ -1,6 +1,7 @@
 package com.travel.io.itinerary_service.model;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ public class Itinerary {
     private String name;
 
     @OneToMany
-    private List<Destination> destinations;
+    private List<Destination> destinations = new  ArrayList<>();
 
     public Itinerary() {
     }

@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +43,24 @@ class ItineraryServiceTest {
     void testCreateItinerary() {
         TravelPlanDto travelPlanDto = new TravelPlanDto();
         travelPlanDto.setName("Test Plan");
-        travelPlanDto.setDestinations(Arrays.asList(new DestinationDto()));
+        DestinationDto destinationDto = new DestinationDto();
+        destinationDto.setName("Test Destination");
+        destinationDto.setDescription("This is a test destination");
+        destinationDto.setStartDate("2022-01-01");
+        destinationDto.setEndDate("2022-01-02");
+        PlanDto planDto = new PlanDto();
+        ActivityDto activityDto = new ActivityDto();
+        activityDto.setActivityName("Test Activity");
+        activityDto.setDescription("This is a test activity");
+        activityDto.setStartTime("10:00");
+        activityDto.setEndTime("12:00");
+        planDto.setActivities(Arrays.asList(activityDto));
+        destinationDto.setPlan(Arrays.asList(planDto));
+        destinationDto.setLocalWonders(Arrays.asList("Wonder1", "Wonder2"));
+        destinationDto.setHotels(Arrays.asList("Hotel1", "Hotel2"));
+
+        travelPlanDto.setDestinations(Arrays.asList(destinationDto));
+
 
         when(itineraryRepository.save(any())).thenReturn(new Itinerary());
 
@@ -101,7 +119,12 @@ class ItineraryServiceTest {
     @Test
     void testCreateDayPlans() {
         PlanDto dtoPlan = new PlanDto();
-        dtoPlan.setActivities(Arrays.asList(new ActivityDto()));
+        ActivityDto dtoActivity = new ActivityDto();
+        dtoActivity.setActivityName("Test Activity");
+        dtoActivity.setDescription("This is a test activity");
+        dtoActivity.setStartTime("10:00");
+        dtoActivity.setEndTime("12:00");
+        dtoPlan.setActivities(Arrays.asList(dtoActivity));
 
         List<DayPlan> dayPlans = itineraryService.createDayPlans(Arrays.asList(dtoPlan));
 

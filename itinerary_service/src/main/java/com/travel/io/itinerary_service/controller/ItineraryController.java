@@ -2,7 +2,6 @@ package com.travel.io.itinerary_service.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.travel.io.itinerary_service.dto.TravelPlanDto;
 import com.travel.io.itinerary_service.model.Itinerary;
