@@ -54,6 +54,22 @@ public class ItineraryService {
 
     }
 
+    public Itinerary fetchItinerary(Long id) {
+        return itineraryRepository.findById(id).orElse(null);
+    }
+
+    public void deleteItinerary(Long id) {
+        Itinerary itinerary = itineraryRepository.findById(id).orElse(null);
+        if (itinerary != null) {
+            itineraryRepository.delete(itinerary);
+        }
+    }
+
+    public void updateItinerary(Long id, Itinerary itinerary) {
+        itinerary.setId(id);
+        itineraryRepository.save(itinerary);
+    }
+
     Destination createDestination(DestinationDto dtoDestination) {
         Destination destination = new Destination();
 
@@ -114,10 +130,10 @@ public class ItineraryService {
 
     List<DayPlan> createDayPlans(List<PlanDto> plan) {
 
-        if(plan == null) {
+        if (plan == null) {
             return new ArrayList<>();
         }
-      
+
         List<DayPlan> dayPlans = new ArrayList<>();
 
         try {
@@ -139,10 +155,9 @@ public class ItineraryService {
 
     List<Activity> createActivities(List<ActivityDto> activities) {
 
-        if(activities == null) {
+        if (activities == null) {
             return new ArrayList<>();
         }
-
 
         List<Activity> activityList = new ArrayList<>();
 
@@ -164,4 +179,5 @@ public class ItineraryService {
         }
         return activityList;
     }
+
 }
