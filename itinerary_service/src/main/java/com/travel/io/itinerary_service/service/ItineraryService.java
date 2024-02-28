@@ -2,6 +2,8 @@ package com.travel.io.itinerary_service.service;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.travel.io.itinerary_service.dto.TravelPlanDto;
 import com.travel.io.itinerary_service.dto.TravelPlanDto.ActivityDto;
@@ -56,6 +58,14 @@ public class ItineraryService {
 
     public Itinerary fetchItinerary(Long id) {
         return itineraryRepository.findById(id).orElse(null);
+    }
+
+    public Page<Itinerary> fetchAllItineraries(Pageable pageable) {
+        if (pageable == null) {
+            throw new IllegalArgumentException("Invalid pageable object");
+        }
+
+        return itineraryRepository.findAll(pageable);
     }
 
     public void deleteItinerary(Long id) {
